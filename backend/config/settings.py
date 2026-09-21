@@ -160,7 +160,7 @@ if DATABASE_URL:
     }
 
 else:
-    # Local development fallback
+    # Local development
     use_sqlite = env_bool("USE_SQLITE_LOCAL", True)
 
     if use_sqlite:
@@ -178,14 +178,28 @@ else:
                     "DB_ENGINE",
                     "django.db.backends.postgresql",
                 ),
-                "NAME": os.getenv("DB_NAME", "coreapex_db"),
-                "USER": os.getenv("DB_USER", "postgres"),
-                "PASSWORD": os.getenv("DB_PASSWORD", "0202"),
-                "HOST": os.getenv("DB_HOST", "localhost"),
-                "PORT": os.getenv("DB_PORT", "5432"),
+                "NAME": os.getenv(
+                    "DB_NAME",
+                    "coreapex_db",
+                ),
+                "USER": os.getenv(
+                    "DB_USER",
+                    "postgres",
+                ),
+                "PASSWORD": os.getenv(
+                    "DB_PASSWORD",
+                    "",
+                ),
+                "HOST": os.getenv(
+                    "DB_HOST",
+                    "localhost",
+                ),
+                "PORT": os.getenv(
+                    "DB_PORT",
+                    "5432",
+                ),
             }
         }
-
 
 # =========================================================
 # PASSWORD VALIDATION
