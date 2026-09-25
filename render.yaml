@@ -1,0 +1,135 @@
+# =============================================================================
+# Render Blueprint — Core Apex.dev
+#
+# Provisions three resources in one sync:
+#   1. coreapex-db   : managed PostgreSQL (free plan)
+#   2. coreapex-api  : Django + DRF (gunicorn + WhiteNoise)
+#   3. coreapex-web  : React / Vite static site (SPA rewrites, always free)
+#
+# How to deploy:
+#   Render Dashboard -> New + -> Blueprint -> select this repo -> Apply
+#
+# Free-tier notes (read before shipping to real customers):
+#   · Web services sleep after 15 min idle and take ~1 min to wake (the site
+#     already warms the API on page load and keeps a 20s request timeout).
+#   · Free instances have NO shell and NO pre-deploy commands, so migrations
+#     run inside the build command below.
+#   · Free PostgreSQL expires 30 days after creation (14-day grace period),
+#     so upgrade the database before then.
+#   · Free instances have an ephemeral filesystem: admin-uploaded media is lost
+#     on deploy. Site artwork ships with the static site, so pages stay intact.
+#
+# Docs: https://render.com/docs/blueprint-spec
+# =============================================================================
+
+databases:
+  - name: coreapex-db
+    databaseName: coreapex_db
+    user: coreapex
+    plan: free
+    region: singapore
+
+services:
+  # ---------------------------------------------------------------------------
+  # Django REST API
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: coreapex-api
+    runtime: python
+    plan: free
+    region: singapore
+    rootDir: backend
+    healthCheckPath: /api/v1/services/
+    # Migrations AND the initial content seed live here because preDeployCommand
+    # requires a paid instance and free instances have no shell to run them by
+    # hand. `seed_data.py` is guarded by SEED_IF_EMPTY (below), so it only fills
+    # an empty database — redeploys never touch live leads or admin edits.
+    # On Starter+: move `migrate` to preDeployCommand (keep the seed in build).
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate --noinput
+      python seed_data.py
+    # preDeployCommand: python manage.py migrate --noinput   # paid instance types only
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 60 --access-logfile - --error-logfile -
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.6"
+      - key: SECRET_KEY
+        generateValue: true          # Render generates a strong random key
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        # Add your custom API domain here, e.g. api.coreapex.dev
+        value: coreapex-api.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: coreapex-db
+          property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        # Public origin(s) of the React site. Add https://coreapex.dev later.
+        value: https://coreapex-web.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        # Required for Django admin logins / form POSTs over HTTPS.
+        value: https://coreapex-api.onrender.com
+      - key: SERVE_MEDIA
+        value: "True"                # serve /media/ uploads through Django
+      # --- First-deploy content + admin account -----------------------------
+      - key: SEED_IF_EMPTY
+        value: "1"                   # seed demo content only into an empty DB
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: coreapex.dev@gmail.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false                  # Render prompts you for this on first sync
+      # Optional: real lead-notification emails (Render dashboard -> service ->
+      # Environment, or set `sync: false` here and Render prompts on first sync).
+      # - key: EMAIL_HOST
+      #   sync: false
+      # - key: EMAIL_HOST_USER
+      #   sync: false
+      # - key: EMAIL_HOST_PASSWORD
+      #   sync: false
+      # - key: PROJECT_REQUEST_RECIPIENT
+      #   sync: false
+    #
+    # Uploaded avatars only survive redeploys with a persistent disk, which
+    # requires a paid instance. Bundled imagery is served by the static site.
+    # disk:
+    #   name: coreapex-media
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    #   # then also set: MEDIA_ROOT=/var/data/media
+
+  # ---------------------------------------------------------------------------
+  # React / Vite static site
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: coreapex-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      # Baked into the bundle at build time — changing it needs a redeploy.
+      - key: VITE_API_URL
+        value: https://coreapex-api.onrender.com/api/v1
+    headers:
+      # Vite emits content-hashed filenames, so they are safe to cache forever.
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /images/*
+        name: Cache-Control
+        value: public, max-age=604800
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+    routes:
+      # SPA fallback — let React Router own every path.
+      - type: rewrite
+        source: /*
+        destination: /index.html

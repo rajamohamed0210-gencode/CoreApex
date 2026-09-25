@@ -2,9 +2,9 @@
 URL configuration for Core Apex backend project.
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
-from django.conf.urls.static import static
+from django.views.static import serve
 
 # Custom Admin Site Branding
 admin.site.site_header = "Core Apex.dev Control Center"
@@ -28,7 +28,16 @@ urlpatterns = [
     path('api/', include('apps.testimonials.urls')),
 ]
 
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+# Uploaded media (team avatars, etc.).
+# NOTE: django.conf.urls.static.static() only routes files while DEBUG is True,
+# so production would 404 on /media/... . We serve MEDIA_ROOT explicitly when
+# SERVE_MEDIA is enabled — keep this for small files, or offload to a CDN /
+# object storage (Cloudinary, S3) if you host a lot of media.
+if settings.SERVE_MEDIA:
+    urlpatterns += [
+        re_path(
+            r"^media/(?P<path>.*)$",
+            serve,
+            {"document_root": settings.MEDIA_ROOT},
+        ),
+    ]

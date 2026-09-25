@@ -15,15 +15,35 @@ from apps.testimonials.models import Testimonial
 
 User = get_user_model()
 
+# SEED_IF_EMPTY=1 makes the script safe to run on every deploy (see render.yaml):
+# it still creates the superuser, but skips the content seed whenever demo data
+# already exists, so live contact leads and admin edits are never overwritten.
+SEED_IF_EMPTY = os.getenv('SEED_IF_EMPTY', '').strip().lower() in ('1', 'true', 'yes', 'on')
+
 def seed_all():
     print("[*] Starting Core Apex.dev database seeding...")
 
     # 1. Superuser
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser('admin', 'admin@coreapex.dev', 'admin123')
-        print("[+] Superuser 'admin' created (password: admin123)")
+    # Deploying? Override the local defaults with real secrets before running:
+    #   DJANGO_SUPERUSER_PASSWORD='<strong-password>' python seed_data.py
+    su_username = os.getenv('DJANGO_SUPERUSER_USERNAME') or 'admin'
+    su_email = os.getenv('DJANGO_SUPERUSER_EMAIL') or 'admin@coreapex.dev'
+    su_password = os.getenv('DJANGO_SUPERUSER_PASSWORD') or 'admin123'
+    if su_password == 'admin123':
+        print("[!] WARNING: using the default password 'admin123'. Set "
+              "DJANGO_SUPERUSER_PASSWORD (or change it in /admin) before going public.")
+    if not User.objects.filter(username=su_username).exists():
+        User.objects.create_superuser(su_username, su_email, su_password)
+        print(f"[+] Superuser '{su_username}' created")
     else:
-        print("[i] Superuser 'admin' already exists")
+        print(f"[i] Superuser '{su_username}' already exists")
+
+    # 1b. Idempotency guard for deploys
+    if SEED_IF_EMPTY and SiteSetting.objects.exists():
+        print("[i] SEED_IF_EMPTY is set and content already exists — skipping the "
+              "content seed to protect live leads and admin edits.")
+        print("[SUCCESS] Nothing to do.")
+        return
 
     # 2. Site Settings
     SiteSetting.objects.all().delete()

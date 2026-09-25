@@ -65,6 +65,14 @@ ALLOWED_HOSTS = env_list(
     "localhost,127.0.0.1"
 )
 
+# Render injects the service's own public hostname (e.g. coreapex-api.onrender.com).
+# Trusting it automatically keeps the API reachable even when ALLOWED_HOSTS has
+# not been filled in yet; add custom domains to ALLOWED_HOSTS explicitly.
+_render_hostname = os.getenv("RENDER_EXTERNAL_HOSTNAME", "").strip()
+
+if _render_hostname and _render_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_render_hostname)
+
 
 # =========================================================
 # APPLICATIONS
@@ -387,17 +395,28 @@ PROJECT_REQUEST_RECIPIENT = os.getenv(
 # PRODUCTION SECURITY
 # =========================================================
 
+# Serve uploaded media (e.g. admin-uploaded avatars) in production too.
+# Set SERVE_MEDIA=False when media is offloaded to a CDN / object storage.
+SERVE_MEDIA = env_bool("SERVE_MEDIA", True)
+
+
 if not DEBUG:
 
+    # Render (and most PaaS) terminate TLS at the proxy and forward the
+    # original scheme in X-Forwarded-Proto.
     SECURE_PROXY_SSL_HEADER = (
         "HTTP_X_FORWARDED_PROTO",
         "https",
     )
 
-    SECURE_SSL_REDIRECT = True
+    # Escape hatches for platforms that health-check over plain HTTP:
+    # set SECURE_SSL_REDIRECT=False if the platform probe reports unhealthy.
+    SECURE_SSL_REDIRECT = env_bool("SECURE_SSL_REDIRECT", True)
 
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_REDIRECT_EXEMPT = env_list("SECURE_REDIRECT_EXEMPT")
+
+    SESSION_COOKIE_SECURE = env_bool("SESSION_COOKIE_SECURE", True)
+    CSRF_COOKIE_SECURE = env_bool("CSRF_COOKIE_SECURE", True)
 
     SESSION_COOKIE_HTTPONLY = True
 
@@ -407,6 +426,8 @@ if not DEBUG:
 
     X_FRAME_OPTIONS = "DENY"
 
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool(
+        "SECURE_HSTS_INCLUDE_SUBDOMAINS", True
+    )
+    SECURE_HSTS_PRELOAD = env_bool("SECURE_HSTS_PRELOAD", True)
