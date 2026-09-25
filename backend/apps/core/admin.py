@@ -32,8 +32,8 @@ class TeamMemberAdmin(admin.ModelAdmin):
             'fields': ('name', 'role', 'bio')
         }),
         ('Profile Image', {
-            'fields': ('avatar', 'avatar_preview', 'avatar_url'),
-            'description': 'Upload an Avatar via "Choose File", or provide an optional external Avatar URL as a fallback.'
+            'fields': ('avatar', 'avatar_preview'),
+            'description': 'Upload the team member profile image using Choose File.'
         }),
         ('Social Links', {
             'fields': ('linkedin_url', 'github_url')
@@ -44,18 +44,12 @@ class TeamMemberAdmin(admin.ModelAdmin):
     )
 
     def avatar_preview(self, obj):
-        """Show a thumbnail preview of the current avatar inside Django Admin."""
         if obj.avatar:
             return format_html(
                 '<img src="{}" style="width:96px;height:96px;object-fit:cover;border-radius:8px;border:1px solid #ccc;" alt="Avatar preview of {}" />',
                 obj.avatar.url, obj.name
             )
-        if obj.avatar_url:
-            return format_html(
-                '<img src="{}" style="width:96px;height:96px;object-fit:cover;border-radius:8px;border:1px solid #ccc;" alt="Avatar preview of {}" />',
-                obj.avatar_url, obj.name
-            )
-        return 'No avatar set'
+        return 'No avatar uploaded'
     avatar_preview.short_description = 'Current Avatar Preview'
 
     def avatar_thumb(self, obj):
@@ -63,11 +57,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
             return format_html(
                 '<img src="{}" style="width:40px;height:40px;object-fit:cover;border-radius:50%;" alt="{}" />',
                 obj.avatar.url, obj.name
-            )
-        if obj.avatar_url:
-            return format_html(
-                '<img src="{}" style="width:40px;height:40px;object-fit:cover;border-radius:50%;" alt="{}" />',
-                obj.avatar_url, obj.name
             )
         return '—'
     avatar_thumb.short_description = 'Avatar'

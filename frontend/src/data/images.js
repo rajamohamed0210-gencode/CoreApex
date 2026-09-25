@@ -60,15 +60,30 @@ const slugifyName = (name = '') =>
 /**
  * Resolve an avatar for a person.
  *
- * Priority: media the API manages itself (uploaded files / bundled paths),
- * then the portrait bundled with the site, then whatever remote URL the API
- * supplied. This keeps portraits working even when third-party image hosts
- * are unreachable.
+ * API-provided image URLs take priority over bundled portraits.
  */
 const resolveAvatar = (map, name, remoteUrl) => {
-  const isManaged = remoteUrl && (remoteUrl.startsWith('/media') || remoteUrl.startsWith('/images'));
-  if (isManaged) return remoteUrl;
-  return map[slugifyName(name)] || remoteUrl || FALLBACK_AVATAR;
+  const cleanRemoteUrl =
+    typeof remoteUrl === 'string' ? remoteUrl.trim() : '';
+
+  // Always use an API-provided absolute URL first.
+  if (
+    cleanRemoteUrl.startsWith('http://') ||
+    cleanRemoteUrl.startsWith('https://')
+  ) {
+    return cleanRemoteUrl;
+  }
+
+  // Also support locally managed paths.
+  if (
+    cleanRemoteUrl.startsWith('/media/') ||
+    cleanRemoteUrl.startsWith('/images/')
+  ) {
+    return cleanRemoteUrl;
+  }
+
+  // Only use bundled image when API has no usable image.
+  return map[slugifyName(name)] || FALLBACK_AVATAR;
 };
 
 export const teamAvatar = (name, remoteUrl) => resolveAvatar(IMAGES.team, name, remoteUrl);

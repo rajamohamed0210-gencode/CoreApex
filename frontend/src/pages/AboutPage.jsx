@@ -39,8 +39,13 @@ export default function AboutPage() {
       ));
 
       if (isMounted && founder) {
-        // Prefer an avatar uploaded through the API, then the bundled portrait.
-        setFounderAvatar(teamAvatar(founder.name, founder.avatar || founder.avatar_url));
+        const imageUrl =
+          founder?.resolved_avatar_url ||
+          founder?.avatar ||
+          founder?.avatar_url ||
+          DEFAULT_FOUNDER_AVATAR;
+
+        setFounderAvatar(imageUrl);
       }
     });
 
