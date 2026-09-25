@@ -497,7 +497,7 @@ def seed_all():
             "name": "Raja Mohamed",
             "role": "Founder & CEO",
             "bio": "Software Architect with extensive expertise in full-stack web, cloud, and enterprise systems. Passionate about transforming ideas into high-impact digital realities.",
-            "avatar_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/team-founder.jpg",
             "linkedin_url": "https://linkedin.com",
             "github_url": "https://github.com",
             "order": 1
@@ -506,7 +506,7 @@ def seed_all():
             "name": "Alex Chen",
             "role": "Principal Cloud & DevOps Architect",
             "bio": "Specialist in high-availability AWS deployments, Docker container orchestration, and automated CI/CD pipelines with zero downtime.",
-            "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/team-cloud-architect.jpg",
             "linkedin_url": "https://linkedin.com",
             "github_url": "https://github.com",
             "order": 2
@@ -515,7 +515,7 @@ def seed_all():
             "name": "Sophia Martinez",
             "role": "Lead UI/UX & Motion Designer",
             "bio": "Crafting premium, intuitive interfaces with micro-interactions and user-centric design systems that elevate tech brands.",
-            "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/team-designer.jpg",
             "linkedin_url": "https://linkedin.com",
             "github_url": "https://github.com",
             "order": 3

@@ -69,8 +69,31 @@ src/
 ## Imagery
 
 All artwork lives in `public/images/` and is registered in `src/data/images.js`
-(`serviceImage(slug)`, `solutionImage(slug)`, `projectImage(index)`). Swap a file or update
-the registry entry to change a visual everywhere at once.
+(`serviceImage(slug)`, `solutionImage(slug)`, `projectImageSrc(project)`,
+`teamAvatar(name, url)`, `testimonialAvatar(name, url)`). Swap a file or update the registry
+entry to change a visual everywhere at once.
+
+### Founder & CEO photo
+
+The founder portrait is always read from `public/images/team-founder.jpg`. To install a real
+photo, either drop your file at that path, or use the helper (crops to a square, strips
+metadata and compresses):
+
+```bash
+cd frontend
+./scripts/set-founder-photo.sh ~/Downloads/raja.png          # 640px square, top-weighted crop
+./scripts/set-founder-photo.sh ./photo.jpg 800 face          # bigger crop
+./scripts/set-founder-photo.sh https://…/photo.jpg          # from a URL
+```
+
+Then refresh the API copy so the backend serves the same file:
+
+```bash
+cd ../backend && .venv/bin/python seed_data.py
+```
+
+> Uploaded avatars added through Django admin (`TeamMember.avatar`) always take priority over
+> the bundled file, so non-developers can change the photo without a deploy.
 
 ## Animation system
 
