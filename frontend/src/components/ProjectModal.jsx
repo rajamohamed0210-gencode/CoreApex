@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, Cpu, ArrowRight, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SmartImage from './SmartImage';
+import { projectImage, projectImageSrc } from '../data/images';
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -109,7 +110,8 @@ export default function ProjectModal({ project, onClose }) {
           {/* Featured image */}
           <div className="group relative mb-6 h-52 overflow-hidden rounded-xl border border-[#E2E8F0] bg-slate-100 sm:h-64">
             <SmartImage
-              src={project.featured_image}
+              src={projectImageSrc(project, 0)}
+              fallback={project.featured_image || projectImage(0)}
               alt={`${project.title} case study`}
               wrapperClassName="h-full w-full"
               className="transition-transform duration-[1100ms] ease-smooth group-hover:scale-[1.05]"

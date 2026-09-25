@@ -185,7 +185,7 @@ export const PROJECTS_DATA = [
       { label: "Peak Uptime", value: "99.99%" },
       { label: "Daily Transactions", value: "50K+" }
     ],
-    featured_image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/images/project-web-platform.jpg",
     website_url: "https://example.com/apex-commerce",
     is_featured: true,
     order: 1
@@ -209,7 +209,7 @@ export const PROJECTS_DATA = [
       { label: "Fee Leakage", value: "0%" },
       { label: "Institutions", value: "12 Campus" }
     ],
-    featured_image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/images/project-erp-software.jpg",
     website_url: "https://example.com/educore",
     is_featured: true,
     order: 2
@@ -233,7 +233,7 @@ export const PROJECTS_DATA = [
       { label: "Tracked Vehicles", value: "500+" },
       { label: "Live GPS Ping", value: "< 1 sec" }
     ],
-    featured_image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/images/project-mobile-app.jpg",
     website_url: "https://example.com/pulsefleet",
     is_featured: true,
     order: 3
@@ -257,7 +257,7 @@ export const PROJECTS_DATA = [
       { label: "Availability", value: "99.999%" },
       { label: "Compliance", value: "SOC2 Ready" }
     ],
-    featured_image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/images/project-cloud-api.jpg",
     website_url: "https://example.com/cloudscale",
     is_featured: true,
     order: 4
@@ -281,7 +281,7 @@ export const PROJECTS_DATA = [
       { label: "Success Rate", value: "99.98%" },
       { label: "Security Score", value: "A+" }
     ],
-    featured_image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/images/services-api-development.jpg",
     website_url: "https://example.com/zenithpay",
     is_featured: true,
     order: 5
@@ -305,7 +305,7 @@ export const PROJECTS_DATA = [
       { label: "Consultations", value: "40K+" },
       { label: "Booking Speed", value: "< 30 sec" }
     ],
-    featured_image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/images/services-ui-ux-design.jpg",
     website_url: "https://example.com/aurahealth",
     is_featured: true,
     order: 6
@@ -457,7 +457,7 @@ export const TEAM_MEMBERS = [
     name: "Raja Mohamed",
     role: "Founder & CEO",
     bio: "Software Architect with extensive expertise in full-stack web, cloud, and enterprise systems. Passionate about transforming ideas into high-impact digital realities.",
-    avatar_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop",
+    avatar_url: "/images/team-founder.jpg",
     linkedin_url: "https://linkedin.com",
     github_url: "https://github.com"
   },
@@ -466,7 +466,7 @@ export const TEAM_MEMBERS = [
     name: "Alex Chen",
     role: "Principal Cloud & DevOps Architect",
     bio: "Specialist in high-availability AWS deployments, Docker container orchestration, and automated CI/CD pipelines with zero downtime.",
-    avatar_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop",
+    avatar_url: "/images/team-cloud-architect.jpg",
     linkedin_url: "https://linkedin.com",
     github_url: "https://github.com"
   },
@@ -475,7 +475,7 @@ export const TEAM_MEMBERS = [
     name: "Sophia Martinez",
     role: "Lead UI/UX & Motion Designer",
     bio: "Crafting premium, intuitive interfaces with micro-interactions and user-centric design systems that elevate tech brands.",
-    avatar_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop",
+    avatar_url: "/images/team-designer.jpg",
     linkedin_url: "https://linkedin.com",
     github_url: "https://github.com"
   }

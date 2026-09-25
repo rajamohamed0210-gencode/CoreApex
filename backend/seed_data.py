@@ -245,7 +245,11 @@ def seed_all():
                 {"label": "Peak Uptime", "value": "99.99%"},
                 {"label": "Daily Transactions", "value": "50K+"}
             ],
-            "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
+            "featured_image": "/images/project-web-platform.jpg",
+            "gallery_images": [
+                    "/images/project-web-platform.jpg",
+                    "/images/services-ui-ux-design.jpg"
+                ],
             "website_url": "https://example.com/apex-commerce",
             "is_featured": True,
             "order": 1
@@ -268,7 +272,11 @@ def seed_all():
                 {"label": "Fee Leakage", "value": "0%"},
                 {"label": "Institutions", "value": "12 Campus"}
             ],
-            "featured_image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
+            "featured_image": "/images/project-erp-software.jpg",
+            "gallery_images": [
+                    "/images/project-erp-software.jpg",
+                    "/images/services-custom-software.jpg"
+                ],
             "website_url": "https://example.com/educore",
             "is_featured": True,
             "order": 2
@@ -291,7 +299,11 @@ def seed_all():
                 {"label": "Tracked Vehicles", "value": "500+"},
                 {"label": "Live GPS Ping", "value": "< 1 sec"}
             ],
-            "featured_image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop",
+            "featured_image": "/images/project-mobile-app.jpg",
+            "gallery_images": [
+                    "/images/project-mobile-app.jpg",
+                    "/images/services-mobile-app.jpg"
+                ],
             "website_url": "https://example.com/pulsefleet",
             "is_featured": True,
             "order": 3
@@ -314,7 +326,11 @@ def seed_all():
                 {"label": "Availability", "value": "99.999%"},
                 {"label": "Compliance", "value": "SOC2 Ready"}
             ],
-            "featured_image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
+            "featured_image": "/images/project-cloud-api.jpg",
+            "gallery_images": [
+                    "/images/project-cloud-api.jpg",
+                    "/images/services-cloud-solutions.jpg"
+                ],
             "website_url": "https://example.com/cloudscale",
             "is_featured": True,
             "order": 4
@@ -337,7 +353,11 @@ def seed_all():
                 {"label": "Success Rate", "value": "99.98%"},
                 {"label": "Security Score", "value": "A+"}
             ],
-            "featured_image": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1200&auto=format&fit=crop",
+            "featured_image": "/images/services-api-development.jpg",
+            "gallery_images": [
+                    "/images/services-api-development.jpg",
+                    "/images/project-cloud-api.jpg"
+                ],
             "website_url": "https://example.com/zenithpay",
             "is_featured": True,
             "order": 5
@@ -360,7 +380,11 @@ def seed_all():
                 {"label": "Consultations", "value": "40K+"},
                 {"label": "Booking Speed", "value": "< 30 sec"}
             ],
-            "featured_image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop",
+            "featured_image": "/images/services-ui-ux-design.jpg",
+            "gallery_images": [
+                    "/images/services-ui-ux-design.jpg",
+                    "/images/project-web-platform.jpg"
+                ],
             "website_url": "https://example.com/aurahealth",
             "is_featured": True,
             "order": 6
@@ -377,7 +401,7 @@ def seed_all():
             "client_name": "Arun Kumar",
             "client_role": "Managing Director",
             "company_name": "Velox Logistics India",
-            "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/avatar-arun-kumar.jpg",
             "content": "Core Apex transformed our legacy tracking system into a modern cloud platform. Raja Mohamed and the engineering team delivered exceptional technical precision, cutting our operational dispatch times in half.",
             "rating": 5,
             "project_title": "PulseFleet Logistics App",
@@ -388,7 +412,7 @@ def seed_all():
             "client_name": "Sarah Jenkins",
             "client_role": "Chief Technology Officer",
             "company_name": "OmniRetail UK",
-            "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/avatar-sarah-jenkins.jpg",
             "content": "The React + Django stack built by Core Apex is pure engineering art. Our platform handled Black Friday traffic with 100% stability. Their commitment to clean architecture and code quality is world-class.",
             "rating": 5,
             "project_title": "ApexCommerce Retail Platform",
@@ -399,7 +423,7 @@ def seed_all():
             "client_name": "Karthik Subramanian",
             "client_role": "Director of Administration",
             "company_name": "Apex Global Schools",
-            "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/avatar-karthik-subramanian.jpg",
             "content": "Our school ERP was completed ahead of schedule. The administrative staff, teachers, and parents have had zero complaints. Core Apex is our long-term technology partner for all digital initiatives.",
             "rating": 5,
             "project_title": "EduCore Campus ERP",
@@ -410,7 +434,7 @@ def seed_all():
             "client_name": "Elena Rostova",
             "client_role": "VP of Product",
             "company_name": "FinScale Systems",
-            "avatar_url": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=300&auto=format&fit=crop",
+            "avatar_url": "/images/avatar-elena-rostova.jpg",
             "content": "From the initial discovery call to architecture and launch, Core Apex proved they understand the business requirements before writing a single line of code. Highly recommended!",
             "rating": 5,
             "project_title": "ZenithPay API Gateway",

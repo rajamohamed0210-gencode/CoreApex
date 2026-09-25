@@ -15,6 +15,7 @@ import SEO from '../components/SEO';
 import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal';
 import { ParallaxImage } from '../components/motion/Parallax';
 import SmartImage from '../components/SmartImage';
+import { projectImage, projectImageSrc } from '../data/images';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 
@@ -108,7 +109,8 @@ export default function ProjectDetailPage() {
             <Reveal variant="zoom" className="mb-8">
               <ParallaxImage className="light-card overflow-hidden rounded-2xl bg-slate-100">
                 <SmartImage
-                  src={project.featured_image}
+                  src={projectImageSrc(project, 0)}
+                  fallback={project.featured_image || projectImage(0)}
                   alt={`${project.title} — delivered by Core Apex.dev`}
                   wrapperClassName="max-h-[480px] w-full"
                   className="max-h-[480px] w-full object-cover"
@@ -209,6 +211,7 @@ export default function ProjectDetailPage() {
                     <div className="light-card card-interactive group overflow-hidden">
                       <SmartImage
                         src={imgUrl}
+                        fallback={projectImage(idx)}
                         alt={`${project.title} screenshot ${idx + 1}`}
                         wrapperClassName="w-full"
                         className="transition-transform duration-[1100ms] ease-smooth group-hover:scale-[1.05]"

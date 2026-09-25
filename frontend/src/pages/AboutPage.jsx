@@ -22,10 +22,10 @@ import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal';
 import AnimatedCounter from '../components/motion/AnimatedCounter';
 import { Parallax } from '../components/motion/Parallax';
 import SmartImage from '../components/SmartImage';
-import { IMAGES } from '../data/images';
+import { IMAGES, teamAvatar } from '../data/images';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
-const DEFAULT_FOUNDER_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';
+const DEFAULT_FOUNDER_AVATAR = teamAvatar('Raja Mohamed');
 
 export default function AboutPage() {
   const [founderAvatar, setFounderAvatar] = useState(DEFAULT_FOUNDER_AVATAR);
@@ -39,7 +39,8 @@ export default function AboutPage() {
       ));
 
       if (isMounted && founder) {
-        setFounderAvatar(founder.avatar || founder.avatar_url || DEFAULT_FOUNDER_AVATAR);
+        // Prefer an avatar uploaded through the API, then the bundled portrait.
+        setFounderAvatar(teamAvatar(founder.name, founder.avatar || founder.avatar_url));
       }
     });
 

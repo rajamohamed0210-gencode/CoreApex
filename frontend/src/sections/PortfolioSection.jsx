@@ -11,7 +11,7 @@ import {
 import ProjectModal from '../components/ProjectModal';
 import SectionHeading from '../components/motion/SectionHeading';
 import SmartImage from '../components/SmartImage';
-import { projectImage } from '../data/images';
+import { projectImage, projectImageSrc } from '../data/images';
 
 export default function PortfolioSection({ projects = [] }) {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -102,8 +102,8 @@ export default function PortfolioSection({ projects = [] }) {
                   {/* Image */}
                   <div className="relative h-52 overflow-hidden bg-slate-100 sm:h-56">
                     <SmartImage
-                      src={project.featured_image || projectImage(idx)}
-                      fallback={projectImage(idx)}
+                      src={projectImageSrc(project, idx)}
+                      fallback={project.featured_image || projectImage(idx)}
                       alt={`${project.title} case study by Core Apex.dev`}
                       wrapperClassName="h-full w-full"
                       className="transition-transform duration-[1100ms] ease-smooth group-hover:scale-[1.08]"

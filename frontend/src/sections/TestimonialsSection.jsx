@@ -6,9 +6,7 @@ import SectionHeading from '../components/motion/SectionHeading';
 import { Stagger, StaggerItem, Reveal } from '../components/motion/Reveal';
 import AnimatedCounter from '../components/motion/AnimatedCounter';
 import SmartImage from '../components/SmartImage';
-
-const FALLBACK_AVATAR =
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop';
+import { testimonialAvatar } from '../data/images';
 
 export default function TestimonialsSection({ testimonials = [] }) {
   return (
@@ -67,8 +65,8 @@ export default function TestimonialsSection({ testimonials = [] }) {
                       <div className="flex items-center gap-3">
                         <div className="relative">
                           <SmartImage
-                            src={test.avatar_url || FALLBACK_AVATAR}
-                            fallback={FALLBACK_AVATAR}
+                            src={testimonialAvatar(test.client_name, test.avatar_url)}
+                            fallback={test.avatar_url}
                             alt={test.client_name}
                             wrapperClassName="h-11 w-11 rounded-full"
                             className="rounded-full border border-[#E2E8F0]"
