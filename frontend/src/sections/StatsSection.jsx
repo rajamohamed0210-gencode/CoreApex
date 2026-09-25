@@ -37,9 +37,7 @@ export default function StatsSection() {
               title="Performance You Can"
               highlight="Measure"
               description="Every Core Apex build ships with monitoring, budgets, and automated pipelines — so quality is provable, not promotional."
-              eyebrowClassName="border-white/15 bg-white/10 text-[#93C5FD]"
-              titleClassName="text-3xl sm:text-4xl md:text-5xl text-white"
-              descriptionClassName="text-slate-300"
+              tone="dark"
             />
 
             <Stagger className="grid grid-cols-1 gap-5 sm:grid-cols-2" stagger={0.12}>

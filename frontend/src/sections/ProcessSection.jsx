@@ -45,7 +45,6 @@ export default function ProcessSection() {
           title="Our 7-Step"
           highlight="Engineering Process"
           description="From initial requirements discovery to post-launch SLA warranty, our structured roadmap ensures reliable delivery."
-          titleClassName="text-3xl sm:text-4xl md:text-5xl"
         />
 
         <div ref={timelineRef} className="relative">
