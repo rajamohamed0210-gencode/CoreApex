@@ -1,0 +1,14 @@
+{
+  "name": "coreapex",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Core Apex.dev — root tooling for the Cloudflare Workers build of the React frontend (see DEPLOY_CLOUDFLARE.md).",
+  "scripts": {
+    "build": "npm --prefix frontend ci --no-audit --no-fund && npm --prefix frontend run build",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.140.0"
+  }
+}

@@ -1,0 +1,16 @@
+// Cloudflare Workers configuration for the `coreapex` Worker.
+//
+// This is the same Worker as the repository-root ./wrangler.jsonc, expressed
+// relative to frontend/. It is here so the deploy step works regardless of the
+// "Root directory" configured for the Worker's build (repository root or
+// frontend/) — Wrangler picks up the closest config and resolves `directory`
+// against this file. Keep both files in sync. See DEPLOY_CLOUDFLARE.md.
+{
+  "name": "coreapex",
+  "compatibility_date": "2026-09-25",
+  "assets": {
+    // Output of `npm run build` (Vite -> dist/).
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
