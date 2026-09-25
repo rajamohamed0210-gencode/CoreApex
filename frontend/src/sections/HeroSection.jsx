@@ -271,9 +271,10 @@ export default function HeroSection() {
             </Reveal>
 
             <Reveal delay={0.08}>
-              <h1 className="text-4xl font-black leading-[1.1] tracking-tight text-[#0F172A] sm:text-5xl lg:text-[54px]">
+              <h1 className="text-[32px] font-black leading-[1.12] tracking-tight text-[#0F172A] sm:text-5xl lg:text-[54px]">
                 We Turn Ideas Into
-                <span className="mt-1 block">
+                {/* Slightly smaller on phones so the longest rotating phrase never overflows */}
+                <span className="mt-1 block text-[27px] sm:text-5xl lg:text-[54px]">
                   <RotatingWord />
                 </span>
               </h1>
