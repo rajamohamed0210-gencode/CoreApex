@@ -83,9 +83,14 @@ deploy` alone is enough. Setting it as well just builds the frontend twice.
 ### Preview builds (non-production branches)
 
 Commits on branches other than the production branch run the trigger's **Preview
-command**, which defaults to `npx wrangler preview` — the Worker Previews beta,
-which takes a Worker **script** entry point. This Worker is assets-only, so if a
-preview build still fails, set the Preview command (Settings → Build) to:
+command**. With this configuration that build is green: it produces a Worker
+Version ID and an alias URL of the form
+`<branch>-coreapex.<account-subdomain>.workers.dev`.
+
+If a preview build ever fails while production passes, the Preview command may
+still be the Worker Previews beta default, `npx wrangler preview`, which takes a
+Worker **script** entry point. This Worker is assets-only; set the Preview
+command (Settings → Build) to:
 
 ```
 npx wrangler versions upload
