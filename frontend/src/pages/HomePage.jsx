@@ -4,6 +4,7 @@ import ServicesSection from '../sections/ServicesSection';
 import WhyCoreApexSection from '../sections/WhyCoreApexSection';
 import TechnologiesSection from '../sections/TechnologiesSection';
 import PortfolioSection from '../sections/PortfolioSection';
+import StatsSection from '../sections/StatsSection';
 import ProcessSection from '../sections/ProcessSection';
 import TestimonialsSection from '../sections/TestimonialsSection';
 import FAQSection from '../sections/FAQSection';
@@ -48,6 +49,7 @@ export default function HomePage() {
         <WhyCoreApexSection />
         <TechnologiesSection technologies={technologies} />
         <PortfolioSection projects={projects} />
+        <StatsSection />
         <ProcessSection />
         <TestimonialsSection testimonials={testimonials} />
         <FAQSection faqs={faqs} />

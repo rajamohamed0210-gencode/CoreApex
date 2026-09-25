@@ -16,6 +16,9 @@ import {
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import SEO from '../components/SEO';
+import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal';
+import SmartImage from '../components/SmartImage';
+import { serviceImage } from '../data/images';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 
@@ -45,8 +48,12 @@ export default function ServiceDetailPage() {
 
   if (loading || !service) {
     return (
-      <div className="pt-36 pb-24 min-h-screen bg-[#F8FAFC] text-center flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#F8FAFC] pb-24 pt-36 text-center">
+        <div className="relative h-11 w-11">
+          <div className="absolute inset-0 rounded-full border-2 border-[#DBEAFE]" />
+          <div className="absolute inset-0 animate-spin rounded-full border-2 border-[#2563EB] border-t-transparent" />
+        </div>
+        <div className="font-mono text-xs uppercase tracking-wider text-slate-400">Loading service…</div>
       </div>
     );
   }
@@ -74,7 +81,8 @@ export default function ServiceDetailPage() {
           </div>
 
           {/* Hero of Service */}
-          <div className="p-7 sm:p-10 rounded-2xl light-card mb-8 space-y-4">
+          <Reveal variant="up">
+          <div className="light-card mb-6 space-y-4 overflow-hidden p-7 sm:p-10">
             <div className="flex items-center gap-3.5">
               <div className="w-14 h-14 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#2563EB]">
                 <Icon size={28} />
@@ -97,12 +105,39 @@ export default function ServiceDetailPage() {
               {service.full_description || service.short_description}
             </p>
           </div>
+          </Reveal>
+
+          {/* Capability visual */}
+          <Reveal variant="zoom" className="mb-8">
+            <div className="group relative overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-card">
+              <SmartImage
+                src={serviceImage(service.slug)}
+                alt={`${service.title} engineering at Core Apex.dev`}
+                ratio="16 / 7"
+                wrapperClassName="w-full"
+                priority
+                className="transition-transform duration-[1300ms] ease-smooth group-hover:scale-[1.05]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-[#0F172A]/10 to-transparent" />
+              <div className="absolute bottom-4 left-5 right-5 flex flex-wrap items-center gap-2">
+                {(service.tech_stack || []).slice(0, 5).map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-lg border border-white/25 bg-white/15 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
 
           {/* Features & Deliverables Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Stagger className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2" stagger={0.15}>
             
             {/* Features */}
-            <div className="p-6 sm:p-7 rounded-2xl light-card space-y-4">
+            <StaggerItem variant="left" className="h-full">
+            <div className="light-card h-full space-y-4 p-6 sm:p-7">
               <h3 className="text-lg font-bold text-[#172033] flex items-center gap-2">
                 <ShieldCheck size={18} className="text-[#2563EB]" />
                 Technical Capabilities
@@ -116,9 +151,11 @@ export default function ServiceDetailPage() {
                 ))}
               </ul>
             </div>
+            </StaggerItem>
 
             {/* Deliverables */}
-            <div className="p-6 sm:p-7 rounded-2xl light-card space-y-4">
+            <StaggerItem variant="right" className="h-full">
+            <div className="light-card h-full space-y-4 p-6 sm:p-7">
               <h3 className="text-lg font-bold text-[#172033] flex items-center gap-2">
                 <Cpu size={18} className="text-[#2563EB]" />
                 Production Deliverables
@@ -132,8 +169,9 @@ export default function ServiceDetailPage() {
                 ))}
               </ul>
             </div>
+            </StaggerItem>
 
-          </div>
+          </Stagger>
 
           {/* Tech Stack Chips */}
           {service.tech_stack && service.tech_stack.length > 0 && (
@@ -141,21 +179,21 @@ export default function ServiceDetailPage() {
               <h3 className="text-xs font-mono uppercase tracking-wider text-[#64748B] font-semibold">
                 Technology Stack Utilized
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <Stagger className="flex flex-wrap gap-2" stagger={0.06}>
                 {service.tech_stack.map((t, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 py-1.5 rounded-lg bg-[#F1F5F9] border border-[#E2E8F0] text-xs font-mono font-medium text-[#172033]"
-                  >
-                    {t}
-                  </span>
+                  <StaggerItem key={idx} variant="zoom">
+                    <span className="rounded-lg border border-[#E2E8F0] bg-[#F1F5F9] px-3 py-1.5 font-mono text-xs font-medium text-[#172033] transition-colors hover:border-[#BFDBFE] hover:bg-[#EFF6FF]">
+                      {t}
+                    </span>
+                  </StaggerItem>
                 ))}
-              </div>
+              </Stagger>
             </div>
           )}
 
           {/* Light CTA Box */}
-          <div className="text-center p-8 sm:p-10 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] space-y-4 shadow-sm">
+          <Reveal variant="up">
+          <div className="space-y-4 rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-8 text-center shadow-sm sm:p-10">
             <h3 className="text-2xl sm:text-3xl font-bold text-[#172033]">
               Launch Your {service.title} Project
             </h3>
@@ -181,6 +219,7 @@ export default function ServiceDetailPage() {
               </a>
             </div>
           </div>
+          </Reveal>
 
         </div>
       </div>

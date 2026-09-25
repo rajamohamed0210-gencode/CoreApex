@@ -14,6 +14,9 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { apiService } from '../services/api';
+import SectionHeading from '../components/motion/SectionHeading';
+import { Reveal } from '../components/motion/Reveal';
+import { Sparkles } from 'lucide-react';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 
@@ -88,22 +91,19 @@ export default function ContactLeadSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-semibold text-[#1D4ED8] uppercase tracking-wider">
-            Start a Project
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#172033] tracking-tight">
-            Let's Build Something <span className="text-[#2563EB]">Exceptional</span>
-          </h2>
-          <p className="text-[#64748B] text-base sm:text-lg">
-            Submit your project requirements below. Our engineering team reviews inquiries within 24 hours.
-          </p>
-        </div>
+        <SectionHeading
+          className="mb-14"
+          eyebrow="Start a Project"
+          icon={Sparkles}
+          title="Let's Build Something"
+          highlight="Exceptional"
+          description="Submit your project requirements below. Our engineering team reviews inquiries within 24 hours."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Column: Direct Info & Guarantees */}
-          <div className="lg:col-span-5 space-y-6">
+          <Reveal variant="left" className="lg:col-span-5 space-y-6">
             <div className="light-card p-7 sm:p-8 space-y-6">
               <h3 className="text-lg font-bold text-[#172033]">
                 What to Expect:
@@ -169,10 +169,10 @@ export default function ContactLeadSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right Column: Lead Form */}
-          <div className="lg:col-span-7">
+          <Reveal variant="right" delay={0.1} className="lg:col-span-7">
             <div className="light-card p-7 sm:p-8">
               
               {submitted ? (
@@ -356,7 +356,7 @@ export default function ContactLeadSection() {
               )}
 
             </div>
-          </div>
+          </Reveal>
 
         </div>
 

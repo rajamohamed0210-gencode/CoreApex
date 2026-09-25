@@ -6,23 +6,23 @@ import {
   Compass,
   ArrowRight,
   Shield,
-  Clock,
-  Users,
-  Code2,
   Check,
   Globe,
   Award,
-  Cpu,
-  Layers,
-  Menu as MenuIcon,
-  Server,
-  Activity
+  Users,
+  Menu as MenuIcon
 } from 'lucide-react';
 import ApexLogoMark from '../components/ApexLogoMark';
 import { WhatsAppIcon, LinkedinIcon, GithubIcon } from '../components/SocialIcons';
 import { ReactLogo, PythonLogo, DjangoLogo, PostgreSQLLogo } from '../components/TechBrandIcons';
 import SEO from '../components/SEO';
 import { apiService } from '../services/api';
+import AuroraBackground from '../components/motion/AuroraBackground';
+import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal';
+import AnimatedCounter from '../components/motion/AnimatedCounter';
+import { Parallax } from '../components/motion/Parallax';
+import SmartImage from '../components/SmartImage';
+import { IMAGES } from '../data/images';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 const DEFAULT_FOUNDER_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop';
@@ -55,11 +55,8 @@ export default function AboutPage() {
         description="Learn about Core Apex.dev, our mission, vision, engineering philosophy, and leadership under Founder & CEO Raja Mohamed."
       />
 
-      <div className="pt-28 pb-20 relative bg-[#F8FAFC] min-h-screen overflow-hidden">
-        
-        {/* Soft Blue Ambient Background Light */}
-        <div className="absolute top-0 right-0 w-3/5 h-[650px] bg-gradient-to-bl from-[#DBEAFE]/40 via-[#EFF6FF]/60 to-transparent pointer-events-none blur-3xl"></div>
-        <div className="absolute top-1/3 left-1/4 w-[450px] h-[350px] bg-blue-50/50 pointer-events-none blur-3xl"></div>
+      <div className="relative min-h-screen overflow-hidden bg-[#F8FAFC] pt-28 pb-20">
+        <AuroraBackground />
 
         {/* Top Right "ENGINEERING EXCELLENCE" Technical Marker */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -160,7 +157,7 @@ export default function AboutPage() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="absolute -top-6 left-1/4 sm:left-1/3 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-xl border border-slate-100 flex items-center gap-4 sm:gap-6"
+                  className="absolute -top-6 left-1/4 sm:left-1/3 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-xl border border-slate-100 flex items-center gap-4 sm:gap-6 animate-float-delayed"
                 >
                   <div className="flex flex-col items-center gap-1">
                     <ReactLogo size={24} />
@@ -185,7 +182,7 @@ export default function AboutPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.35 }}
-                  className="absolute top-28 -left-4 sm:-left-8 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-slate-100 space-y-2.5 min-w-[185px]"
+                  className="absolute top-28 -left-4 sm:-left-8 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-slate-100 space-y-2.5 min-w-[185px] animate-float-soft"
                 >
                   <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
                     <Check size={14} className="text-[#2563EB] stroke-[3]" />
@@ -343,7 +340,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="pt-6 pb-16 border-t border-slate-200/80 mb-16"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <Stagger className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8" stagger={0.1}>
               
               {/* Stat 1 */}
               <div className="flex items-center gap-3.5">
@@ -351,7 +348,9 @@ export default function AboutPage() {
                   <Award size={22} />
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">50+</div>
+                  <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">
+                    <AnimatedCounter value={50} suffix="+" />
+                  </div>
                   <div className="text-xs text-[#64748B] font-medium">Projects Delivered</div>
                 </div>
               </div>
@@ -373,7 +372,9 @@ export default function AboutPage() {
                   <Shield size={22} />
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">100%</div>
+                  <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">
+                    <AnimatedCounter value={100} suffix="%" />
+                  </div>
                   <div className="text-xs text-[#64748B] font-medium">In-House Engineering</div>
                 </div>
               </div>
@@ -389,14 +390,15 @@ export default function AboutPage() {
                 </div>
               </div>
 
-            </div>
+            </Stagger>
           </motion.div>
 
           {/* =========================================
               MISSION & VISION SECTION
              ========================================= */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-            <div className="p-8 sm:p-10 rounded-2xl bg-white border border-[#E2E8F0] shadow-card space-y-4">
+          <Stagger className="mb-20 grid grid-cols-1 gap-8 md:grid-cols-2" stagger={0.15}>
+            <StaggerItem variant="left" className="h-full">
+            <div className="light-card h-full space-y-4 p-8 sm:p-10">
               <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE] text-[#2563EB] flex items-center justify-center">
                 <Target size={24} />
               </div>
@@ -406,7 +408,9 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="p-8 sm:p-10 rounded-2xl bg-white border border-[#E2E8F0] shadow-card space-y-4">
+            </StaggerItem>
+            <StaggerItem variant="right" className="h-full">
+            <div className="light-card h-full space-y-4 p-8 sm:p-10">
               <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE] text-[#2563EB] flex items-center justify-center">
                 <Compass size={24} />
               </div>
@@ -415,22 +419,96 @@ export default function AboutPage() {
                 To become the gold-standard engineering partner for enterprises and visionary entrepreneurs seeking world-class full-stack development, cloud resilience, and product excellence.
               </p>
             </div>
+            </StaggerItem>
+          </Stagger>
+
+          {/* =========================================
+              CULTURE / ENGINEERING TEAM BAND
+             ========================================= */}
+          <div className="grid grid-cols-1 items-center gap-10 mb-20 lg:grid-cols-12">
+            <Reveal variant="left" className="lg:col-span-6">
+              <Parallax speed={0.1}>
+                <div className="relative overflow-hidden rounded-3xl border border-[#E2E8F0] bg-white shadow-lift">
+                  <SmartImage
+                    src={IMAGES.aboutTeam}
+                    alt="Core Apex.dev engineers pairing on a product sprint"
+                    ratio="16 / 11"
+                    wrapperClassName="w-full"
+                    className="transition-transform duration-[1400ms] ease-smooth hover:scale-[1.05]"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0F172A]/40 to-transparent" />
+                </div>
+              </Parallax>
+            </Reveal>
+
+            <div className="lg:col-span-6 space-y-6">
+              <Reveal variant="up">
+                <span className="inline-flex items-center gap-2 rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-[#1D4ED8]">
+                  How We Work
+                </span>
+              </Reveal>
+              <Reveal variant="up" delay={0.08}>
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#172033]">
+                  A senior team, <span className="text-gradient-brand">close to your business</span>
+                </h2>
+              </Reveal>
+              <Reveal variant="up" delay={0.14}>
+                <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
+                  You work directly with the engineers writing the code — no account-manager relay.
+                  Short feedback loops, written updates every sprint, and architecture decisions explained in plain language.
+                </p>
+              </Reveal>
+
+              <Stagger className="grid grid-cols-2 gap-4 pt-2" stagger={0.1}>
+                {[
+                  { value: 2, suffix: '-week', label: 'Sprint cadence' },
+                  { value: 100, suffix: '%', label: 'In-house team' },
+                  { value: 24, suffix: 'h', label: 'Response window' },
+                  { value: 30, suffix: '-day', label: 'Launch warranty' },
+                ].map((stat) => (
+                  <StaggerItem key={stat.label} variant="zoom" className="h-full">
+                    <div className="light-card h-full p-5">
+                      <div className="text-xl font-extrabold tracking-tight text-[#0F172A] sm:text-2xl">
+                        <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                      </div>
+                      <div className="text-xs font-medium text-[#64748B]">{stat.label}</div>
+                    </div>
+                  </StaggerItem>
+                ))}
+              </Stagger>
+
+              <Reveal variant="up" delay={0.1}>
+                <Link
+                  to="/process"
+                  className="group inline-flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-5 py-3 text-sm font-semibold text-[#172033] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#BFDBFE] hover:text-[#2563EB]"
+                >
+                  <span>See how a project runs</span>
+                  <ArrowRight size={15} className="text-[#2563EB] transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </Reveal>
+            </div>
           </div>
 
           {/* =========================================
               EXECUTIVE LEADERSHIP SECTION
              ========================================= */}
-          <div className="p-8 sm:p-12 rounded-2xl bg-white border border-[#E2E8F0] shadow-card mb-20">
+          <Reveal variant="up" className="mb-20">
+          <div className="light-card overflow-hidden p-8 sm:p-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               
               <div className="lg:col-span-4 flex justify-center">
-                <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-md">
+                <motion.div
+                  whileHover={{ rotate: -2, scale: 1.03 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl p-1 border border-[#BFDBFE] bg-white shadow-card-hover"
+                >
+                  <span className="absolute -inset-3 -z-10 rounded-[1.75rem] bg-[#EFF6FF] animate-pulse" />
                   <img
                     src={founderAvatar}
                     alt="Raja Mohamed — Founder & CEO"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-[14px]"
                   />
-                </div>
+                </motion.div>
               </div>
 
               <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
@@ -471,12 +549,15 @@ export default function AboutPage() {
 
             </div>
           </div>
+          </Reveal>
 
           {/* =========================================
               BOTTOM CTA BANNER
              ========================================= */}
-          <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#172033] to-[#1E293B] text-white text-center space-y-6 shadow-2xl">
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+          <Reveal variant="up">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#172033] to-[#1E293B] p-8 text-center text-white shadow-2xl sm:p-12">
+            <span className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#2563EB]/30 blur-3xl animate-aurora" />
+            <h2 className="relative text-3xl sm:text-4xl font-black tracking-tight">
               Ready to Build Your Next Digital Milestone?
             </h2>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
@@ -501,6 +582,7 @@ export default function AboutPage() {
               </a>
             </div>
           </div>
+          </Reveal>
 
         </div>
 

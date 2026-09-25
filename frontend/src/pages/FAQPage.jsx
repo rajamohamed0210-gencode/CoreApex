@@ -4,6 +4,8 @@ import { HelpCircle, ChevronDown, MessageSquare, ArrowRight } from 'lucide-react
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { apiService } from '../services/api';
+import PageHero from '../components/motion/PageHero';
+import { Stagger, StaggerItem, Reveal } from '../components/motion/Reveal';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 
@@ -71,25 +73,20 @@ export default function FAQPage() {
         description="Find answers to common questions about our software development lifecycle, IP ownership, pricing, and warranty at Core Apex.dev."
       />
 
-      <div className="pt-28 pb-20 relative bg-[#F8FAFC] min-h-screen overflow-hidden">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-semibold text-[#1D4ED8] uppercase tracking-wider">
-              <HelpCircle size={14} /> Clarity & Transparency
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#172033] tracking-tight leading-tight">
-              Frequently Asked <span className="text-[#2563EB]">Questions</span>
-            </h1>
-            <p className="text-[#64748B] text-base sm:text-lg leading-relaxed">
-              Transparent answers regarding our engineering standards, timelines, contracts, and continuous support.
-            </p>
-          </div>
+      <div className="min-h-screen bg-[#F8FAFC]">
+        <PageHero
+          eyebrow="Clarity & Transparency"
+          icon={HelpCircle}
+          title="Frequently Asked"
+          highlight="Questions"
+          description="Transparent answers regarding our engineering standards, timelines, contracts, and continuous support."
+          chips={['Timelines', 'IP Ownership', 'Pricing', 'Support', 'Migrations']}
+        />
 
+        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
           {/* Category Tabs */}
           {categories.length > 2 && (
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
+            <Reveal variant="down" className="mb-8 flex flex-wrap justify-center gap-2">
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -103,17 +100,19 @@ export default function FAQPage() {
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </button>
               ))}
-            </div>
+            </Reveal>
           )}
 
           {/* FAQ Accordion */}
-          <div className="space-y-3.5 mb-14">
+          <Stagger className="mb-14 space-y-3.5" stagger={0.07}>
             {filteredFaqs.map((faq, idx) => {
               const isOpen = openIndex === idx;
               return (
+                <StaggerItem key={faq.id || idx} variant="up">
                 <div
-                  key={faq.id || idx}
-                  className="light-card overflow-hidden transition-colors"
+                  className={`light-card overflow-hidden transition-colors ${
+                    isOpen ? 'border-[#BFDBFE] shadow-card-hover' : ''
+                  }`}
                 >
                   <button
                     onClick={() => toggleFAQ(idx)}
@@ -126,35 +125,41 @@ export default function FAQPage() {
                       </span>
                       {faq.question}
                     </span>
-                    <ChevronDown
-                      size={16}
-                      className={`text-[#64748B] flex-shrink-0 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180 text-[#2563EB]' : ''
+                    <motion.span
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border transition-colors ${
+                        isOpen
+                          ? 'border-[#2563EB] bg-[#2563EB] text-white'
+                          : 'border-[#E2E8F0] bg-white text-[#64748B]'
                       }`}
-                    />
+                    >
+                      <ChevronDown size={15} />
+                    </motion.span>
                   </button>
 
-                  <AnimatePresence>
+                  <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                       >
-                        <div className="px-5 sm:px-6 pb-6 pt-1 text-xs sm:text-sm text-[#64748B] leading-relaxed border-t border-[#F1F5F9]">
+                        <div className="px-5 sm:px-6 pb-6 pt-4 text-xs sm:text-sm text-[#64748B] leading-relaxed border-t border-[#F1F5F9]">
                           {faq.answer}
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </Stagger>
 
           {/* Light CTA */}
-          <div className="p-8 sm:p-10 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] text-center space-y-4 shadow-sm">
+          <Reveal variant="up" className="space-y-4 rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-8 text-center shadow-sm sm:p-10">
             <h3 className="text-2xl sm:text-3xl font-bold text-[#172033]">
               Still Have Questions?
             </h3>
@@ -179,7 +184,7 @@ export default function FAQPage() {
                 <span>Instant WhatsApp</span>
               </a>
             </div>
-          </div>
+          </Reveal>
 
         </div>
       </div>

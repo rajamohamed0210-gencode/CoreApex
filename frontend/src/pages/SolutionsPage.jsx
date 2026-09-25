@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   Briefcase,
   ShoppingCart,
@@ -14,6 +15,11 @@ import {
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import SEO from '../components/SEO';
+import PageHero from '../components/motion/PageHero';
+import { Stagger, StaggerItem } from '../components/motion/Reveal';
+import TiltCard from '../components/motion/TiltCard';
+import SmartImage from '../components/SmartImage';
+import { solutionImage, IMAGES } from '../data/images';
 
 const iconMap = {
   Briefcase,
@@ -42,105 +48,119 @@ export default function SolutionsPage() {
         description="Engineered digital solutions for enterprises: E-commerce platforms, School Management ERPs, Custom CRMs, Enterprise Resource Planning, and Business Websites."
       />
 
-      <div className="pt-28 pb-20 relative bg-[#F8FAFC] min-h-screen overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-semibold text-[#1D4ED8] uppercase tracking-wider">
-              <Sparkles size={14} /> Business Solutions
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#172033] tracking-tight leading-tight">
-              Industry-Specific <span className="text-[#2563EB]">Solutions</span>
-            </h1>
-            <p className="text-[#64748B] text-base sm:text-lg leading-relaxed">
-              Tailored software ecosystems engineered for immediate business impact. Proven architectures with bespoke customization.
-            </p>
-          </div>
+      <div className="min-h-screen bg-[#F8FAFC]">
+        <PageHero
+          eyebrow="Business Solutions"
+          icon={Sparkles}
+          title="Industry-Specific"
+          highlight="Solutions"
+          description="Tailored software ecosystems engineered for immediate business impact. Proven architectures with bespoke customization."
+          image={IMAGES.solutions['ecommerce-platforms']}
+          imageAlt="Custom ecommerce and ERP solutions engineered by Core Apex.dev"
+          imageBadge={{ icon: TrendingUp, title: 'Measurable ROI', subtitle: 'Outcome-first scoping' }}
+          chips={['Ecommerce', 'School ERP', 'CRM', 'ERP', 'Business Sites', 'Custom Software']}
+        />
 
-          {/* Solutions 6-Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {solutions.map((sol, idx) => {
-              const Icon = iconMap[sol.icon_name] || Layers;
+        <section className="py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Stagger className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3" stagger={0.1}>
+              {solutions.map((sol, idx) => {
+                const Icon = iconMap[sol.icon_name] || Layers;
 
-              return (
-                <div
-                  key={sol.id || idx}
-                  id={sol.slug}
-                  className="light-card p-7 flex flex-col justify-between scroll-mt-28"
-                >
-                  <div>
-                    {/* Top Icon & Industry */}
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#2563EB]">
-                        <Icon size={24} />
-                      </div>
-                      <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-[#F1F5F9] border border-[#E2E8F0] text-[#64748B] uppercase">
-                        {sol.industry}
-                      </span>
-                    </div>
+                return (
+                  <StaggerItem key={sol.id || idx} variant="up" className="h-full">
 
-                    {/* Title & Tagline */}
-                    <h3 className="text-xl font-bold text-[#172033] mb-1">
-                      {sol.title}
-                    </h3>
-                    <p className="text-xs font-mono text-[#2563EB] font-semibold mb-3">
-                      {sol.tagline}
-                    </p>
+                    <TiltCard intensity={5} className="h-full rounded-2xl">
+                      <div
+                        id={sol.slug}
+                        className="light-card card-interactive card-sheen group flex h-full scroll-mt-28 flex-col justify-between overflow-hidden"
+                      >
+                        <div className="relative h-40 overflow-hidden">
+                          <SmartImage
+                            src={solutionImage(sol.slug)}
+                            alt={`${sol.title} solution by Core Apex.dev`}
+                            wrapperClassName="h-full w-full"
+                            className="transition-transform duration-[1100ms] ease-smooth group-hover:scale-[1.08]"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/78 via-[#0F172A]/20 to-transparent" />
 
-                    {/* Description */}
-                    <p className="text-[#64748B] text-xs sm:text-sm leading-relaxed mb-5">
-                      {sol.description}
-                    </p>
-
-                    {/* Key Modules */}
-                    {sol.key_modules && sol.key_modules.length > 0 && (
-                      <div className="space-y-1.5 mb-5">
-                        <div className="text-[11px] font-mono uppercase text-[#94A3B8] font-semibold">
-                          Core Modules:
-                        </div>
-                        {sol.key_modules.map((mod, mIdx) => (
-                          <div key={mIdx} className="text-xs text-[#475569] flex items-center gap-2">
-                            <CheckCircle2 size={13} className="text-[#2563EB] flex-shrink-0" />
-                            <span>{mod}</span>
+                          <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/40 bg-white/90 text-[#2563EB] backdrop-blur transition-transform duration-500 group-hover:rotate-[8deg] group-hover:scale-110">
+                            <Icon size={20} />
                           </div>
-                        ))}
-                      </div>
-                    )}
 
-                    {/* Business Benefits */}
-                    {sol.business_benefits && sol.business_benefits.length > 0 && (
-                      <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/60 space-y-1 mb-5">
-                        <div className="text-[10px] font-mono uppercase text-emerald-800 font-bold flex items-center gap-1">
-                          <TrendingUp size={12} /> ROI Impact
+                          <span className="absolute right-4 top-4 rounded-lg border border-white/30 bg-white/20 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur">
+                            {sol.industry}
+                          </span>
+
+                          <h3 className="absolute bottom-3.5 left-4 right-4 text-lg font-bold text-white">
+                            {sol.title}
+                          </h3>
                         </div>
-                        {sol.business_benefits.map((ben, bIdx) => (
-                          <div key={bIdx} className="text-xs text-[#1E293B]">
-                            • {ben}
+
+                        <div className="flex flex-1 flex-col justify-between p-6">
+                          <div>
+                            <p className="mb-3 font-mono text-xs font-semibold text-[#2563EB]">{sol.tagline}</p>
+
+                            <p className="mb-5 text-xs leading-relaxed text-[#64748B] sm:text-sm">
+                              {sol.description}
+                            </p>
+
+                            {sol.key_modules && sol.key_modules.length > 0 && (
+                              <div className="mb-5 space-y-1.5">
+                                <div className="font-mono text-[11px] font-semibold uppercase text-[#94A3B8]">
+                                  Core Modules:
+                                </div>
+                                {sol.key_modules.map((mod, mIdx) => (
+                                  <motion.div
+                                    key={mIdx}
+                                    initial={{ opacity: 0, x: -6 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: mIdx * 0.07, duration: 0.4 }}
+                                    className="flex items-center gap-2 text-xs text-[#475569]"
+                                  >
+                                    <CheckCircle2 size={13} className="flex-shrink-0 text-[#2563EB]" />
+                                    <span>{mod}</span>
+                                  </motion.div>
+                                ))}
+                              </div>
+                            )}
+
+                            {sol.business_benefits && sol.business_benefits.length > 0 && (
+                              <div className="mb-5 space-y-1 rounded-xl border border-emerald-200/60 bg-emerald-50/70 p-3">
+                                <div className="flex items-center gap-1 font-mono text-[10px] font-bold uppercase text-emerald-800">
+                                  <TrendingUp size={12} /> ROI Impact
+                                </div>
+                                {sol.business_benefits.map((ben, bIdx) => (
+                                  <div key={bIdx} className="text-xs text-[#1E293B]">
+                                    • {ben}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                        ))}
+
+                          <div className="border-t border-[#F1F5F9] pt-4">
+                            <Link
+                              to="/contact"
+                              className="group/btn flex w-full items-center justify-between rounded-xl bg-[#EFF6FF] px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#1D4ED8] transition-colors hover:bg-[#DBEAFE]"
+                            >
+                              <span>Deploy {sol.title}</span>
+                              <ArrowRight
+                                size={14}
+                                className="transition-transform duration-300 group-hover/btn:translate-x-1"
+                              />
+                            </Link>
+                          </div>
+                        </div>
                       </div>
-                    )}
-
-                  </div>
-
-                  {/* CTA */}
-                  <div className="pt-4 border-t border-[#F1F5F9]">
-                    <Link
-                      to="/contact"
-                      className="w-full inline-flex items-center justify-between px-4 py-2 rounded-xl bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#1D4ED8] text-xs font-semibold uppercase font-mono tracking-wider transition-colors"
-                    >
-                      <span>Deploy {sol.title}</span>
-                      <ArrowRight size={14} />
-                    </Link>
-                  </div>
-
-                </div>
-              );
-            })}
+                    </TiltCard>
+                  </StaggerItem>
+                );
+              })}
+            </Stagger>
           </div>
-
-        </div>
+        </section>
       </div>
     </>
   );

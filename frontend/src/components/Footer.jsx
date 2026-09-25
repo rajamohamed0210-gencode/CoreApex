@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   Mail,
   Phone,
   MapPin,
   ArrowRight,
   CheckCircle2,
-  ExternalLink,
   ShieldCheck
 } from 'lucide-react';
 import ApexLogoMark from './ApexLogoMark';
 import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './SocialIcons';
+import { Reveal, Stagger, StaggerItem } from './motion/Reveal';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 
@@ -28,14 +29,35 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#172033] text-[#CBD5E1] pt-16 pb-10 border-t border-[#334155]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+    <footer className="relative overflow-hidden bg-[#172033] pb-10 pt-16 text-[#CBD5E1]">
+      {/* Ambient animated glow */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <span className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-[#2563EB]/25 blur-3xl animate-aurora" />
+        <span className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[#38BDF8]/20 blur-3xl animate-aurora-slow" />
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right, rgba(148,163,184,0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.4) 1px, transparent 1px)',
+            backgroundSize: '38px 38px',
+          }}
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#2563EB] to-transparent" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Stagger className="mb-12 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5" stagger={0.09}>
           
           {/* Col 1: Brand Info */}
-          <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-2.5 group inline-flex">
-              <ApexLogoMark size={36} />
+          <StaggerItem variant="up" className="lg:col-span-2 space-y-4">
+            <Link to="/" className="group inline-flex items-center gap-2.5">
+              <motion.span
+                whileHover={{ rotate: -8, scale: 1.06 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                className="inline-flex"
+              >
+                <ApexLogoMark size={36} />
+              </motion.span>
               <div className="flex flex-col">
                 <span className="font-extrabold text-xl tracking-tight text-white">
                   Core Apex<span className="text-[#38BDF8]">.dev</span>
@@ -71,7 +93,7 @@ export default function Footer() {
                 rel="noreferrer"
                 aria-label="Core Apex.dev WhatsApp"
                 title="Chat on WhatsApp"
-                className="p-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 hover:text-white hover:bg-emerald-600 transition-colors"
+                className="rounded-xl border border-emerald-500/40 bg-emerald-500/20 p-2 text-emerald-400 transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-600 hover:text-white"
               >
                 <WhatsAppIcon size={16} />
               </a>
@@ -94,10 +116,10 @@ export default function Footer() {
                 <LinkedinIcon size={16} />
               </a>
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Col 2: Services */}
-          <div className="space-y-3">
+          <StaggerItem variant="up" className="space-y-3">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
               Services
             </h4>
@@ -109,10 +131,10 @@ export default function Footer() {
               <li><Link to="/services/api-development" className="hover:text-white transition-colors">API Development</Link></li>
               <li><Link to="/services/ui-ux-design" className="hover:text-white transition-colors">UI/UX Design Systems</Link></li>
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Col 3: Company & Process */}
-          <div className="space-y-3">
+          <StaggerItem variant="up" className="space-y-3">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
               Explore
             </h4>
@@ -124,10 +146,10 @@ export default function Footer() {
               <li><Link to="/faq" className="hover:text-white transition-colors">Frequently Asked Questions</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact & Quote</Link></li>
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Col 4: Direct Contact & Newsletter */}
-          <div className="space-y-3">
+          <StaggerItem variant="up" className="space-y-3">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
               Contact
             </h4>
@@ -167,17 +189,21 @@ export default function Footer() {
                 </button>
               </div>
               {subscribed && (
-                <p className="text-[10px] text-emerald-400 flex items-center gap-1 mt-1 font-medium">
+                <motion.p
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-1 flex items-center gap-1 text-[10px] font-medium text-emerald-400"
+                >
                   <CheckCircle2 size={11} /> Subscribed successfully!
-                </p>
+                </motion.p>
               )}
             </form>
-          </div>
+          </StaggerItem>
 
-        </div>
+        </Stagger>
 
         {/* Bottom Divider & Copyright */}
-        <div className="pt-6 mt-6 border-t border-[#334155] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 font-mono">
+        <Reveal variant="fade" className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-[#334155] pt-6 font-mono text-xs text-slate-400 sm:flex-row">
           <div>
             © {new Date().getFullYear()} Core Apex.dev. All rights reserved.
           </div>
@@ -188,7 +214,7 @@ export default function Footer() {
             <Link to="/about" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/about" className="hover:text-white transition-colors">Terms of Service</Link>
           </div>
-        </div>
+        </Reveal>
 
       </div>
     </footer>

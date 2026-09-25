@@ -7,8 +7,10 @@ import {
   TECHNOLOGIES_DATA
 } from '../data/mockData';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
+// Relative by default: requests go to the same origin and are proxied to the
+// Django backend (configured in vite.config.js / the production web server).
+// Set VITE_API_URL to point at an absolute API host when needed.
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
 const client = axios.create({
   baseURL: API_BASE_URL,

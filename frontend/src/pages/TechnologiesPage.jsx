@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Cpu, ArrowRight } from 'lucide-react';
+import { Cpu, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import TechnologiesSection from '../sections/TechnologiesSection';
 import SEO from '../components/SEO';
 import { apiService } from '../services/api';
+import PageHero from '../components/motion/PageHero';
+import { Reveal } from '../components/motion/Reveal';
+import { IMAGES } from '../data/images';
 
 export default function TechnologiesPage() {
   const [technologies, setTechnologies] = useState([]);
@@ -54,84 +57,94 @@ export default function TechnologiesPage() {
         description="Explore the modern tech stack and infrastructure we utilize at Core Apex.dev: React, Django, PostgreSQL 18, FastAPI, AWS, and Docker."
       />
 
-      <div className="pt-28 pb-20 relative bg-[#F8FAFC] min-h-screen overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-mono font-semibold text-[#1D4ED8] uppercase tracking-wider">
-              <Cpu size={14} /> Full Stack Architecture
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#172033] tracking-tight leading-tight">
-              Technology <span className="text-[#2563EB]">Ecosystem</span>
-            </h1>
-            <p className="text-[#64748B] text-base sm:text-lg leading-relaxed">
-              We build with modern, production-hardened technologies designed for high availability, security, and developer velocity.
-            </p>
-          </div>
+      <div className="min-h-screen bg-[#F8FAFC]">
+        <PageHero
+          eyebrow="Full Stack Architecture"
+          icon={Cpu}
+          title="Technology"
+          highlight="Ecosystem"
+          description="We build with modern, production-hardened technologies designed for high availability, security, and developer velocity."
+          image={IMAGES.services['cloud-solutions']}
+          imageAlt="Cloud infrastructure and technology ecosystem used by Core Apex.dev"
+          imageBadge={{ icon: Sparkles, title: '11 core technologies', subtitle: 'Battle-tested stack' }}
+        />
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {categories.map((cat) => (
-              <button
-                key={cat.key}
-                onClick={() => setActiveCategory(cat.key)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
-                  activeCategory === cat.key
-                    ? 'bg-[#2563EB] text-white shadow-sm border border-[#2563EB]'
-                    : 'bg-white text-[#64748B] hover:text-[#172033] hover:bg-[#F8FAFC] border border-[#E2E8F0]'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+        <section className="py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Reveal variant="down" className="mb-10 flex flex-wrap justify-center gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.key}
+                  onClick={() => setActiveCategory(cat.key)}
+                  className={`relative rounded-xl px-3.5 py-1.5 font-mono text-xs font-semibold transition-all duration-300 ${
+                    activeCategory === cat.key
+                      ? 'border border-[#2563EB] bg-[#2563EB] text-white shadow-button-glow'
+                      : 'border border-[#E2E8F0] bg-white text-[#64748B] hover:-translate-y-0.5 hover:border-[#BFDBFE] hover:text-[#172033]'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </Reveal>
 
-          {/* Technologies Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-            {filteredTech.map((tech, idx) => (
-              <div
-                key={idx}
-                className="light-card p-6 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-base font-bold text-[#172033]">
-                      {tech.name}
-                    </span>
-                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8]">
-                      {tech.category}
-                    </span>
+            <motion.div
+              layout
+              className="mb-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {filteredTech.map((tech, idx) => (
+                <motion.div
+                  key={`${tech.name}-${tech.category}`}
+                  layout
+                  initial={{ opacity: 0, y: 22, scale: 0.97 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, delay: (idx % 3) * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -5 }}
+                  className="light-card card-interactive group flex flex-col justify-between p-6"
+                >
+                  <div>
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-base font-bold text-[#172033] transition-colors group-hover:text-[#2563EB]">
+                        {tech.name}
+                      </span>
+                      <span className="rounded-md border border-[#BFDBFE] bg-[#EFF6FF] px-2 py-0.5 font-mono text-[10px] uppercase text-[#1D4ED8]">
+                        {tech.category}
+                      </span>
+                    </div>
+                    <p className="text-xs leading-relaxed text-[#64748B] sm:text-sm">
+                      {tech.description || 'Enterprise-grade technology implemented with industry best practices.'}
+                    </p>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
-                    {tech.description || 'Enterprise-grade technology implemented with industry best practices.'}
+
+                  <span className="mt-4 h-[2px] w-0 bg-gradient-to-r from-[#2563EB] to-[#38BDF8] transition-all duration-500 group-hover:w-full" />
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <TechnologiesSection technologies={technologies} />
+
+            <Reveal variant="up" className="mt-14">
+              <div className="relative overflow-hidden rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-8 text-center shadow-sm sm:p-10">
+                <div className="bg-grid-subtle pointer-events-none absolute inset-0 opacity-70" />
+                <div className="relative space-y-4">
+                  <h3 className="text-2xl font-extrabold text-[#172033] sm:text-3xl">
+                    Have a Specific Tech Stack in Mind?
+                  </h3>
+                  <p className="mx-auto max-w-lg text-xs text-[#64748B] sm:text-sm">
+                    We adapt to your existing infrastructure or architect a greenfield stack tailored to your load requirements.
                   </p>
+                  <Link
+                    to="/contact"
+                    className="group inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-white shadow-button-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1D4ED8]"
+                  >
+                    <span>Discuss Your Tech Stack</span>
+                    <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </div>
-            ))}
+            </Reveal>
           </div>
-
-          {/* Interactive Visual Orbit Section */}
-          <TechnologiesSection technologies={technologies} />
-
-          {/* Light CTA */}
-          <div className="mt-14 p-8 sm:p-10 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] text-center space-y-4 shadow-sm">
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#172033]">
-              Have a Specific Tech Stack in Mind?
-            </h3>
-            <p className="text-[#64748B] text-xs sm:text-sm max-w-lg mx-auto">
-              We adapt to your existing infrastructure or architect a greenfield stack tailored to your load requirements.
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs uppercase tracking-wider font-mono shadow-button-glow transition-all"
-            >
-              <span>Discuss Your Tech Stack</span>
-              <ArrowRight size={15} />
-            </Link>
-          </div>
-
-        </div>
+        </section>
       </div>
     </>
   );

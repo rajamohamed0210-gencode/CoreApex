@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -8,368 +8,421 @@ import {
   Users,
   Code2,
   Check,
-  Menu as MenuIcon
+  Star,
+  Activity,
+  GitBranch,
+  Sparkles,
+  Mouse
 } from 'lucide-react';
-import ApexLogoMark from '../components/ApexLogoMark';
 import { WhatsAppIcon } from '../components/SocialIcons';
 import { ReactLogo, PythonLogo, DjangoLogo, PostgreSQLLogo } from '../components/TechBrandIcons';
+import AuroraBackground from '../components/motion/AuroraBackground';
+import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal';
+import AnimatedCounter from '../components/motion/AnimatedCounter';
+import Marquee from '../components/motion/Marquee';
+import TiltCard from '../components/motion/TiltCard';
+import SmartImage from '../components/SmartImage';
+import { IMAGES } from '../data/images';
 
 const WHATSAPP_URL = 'https://wa.me/message/THZ4AI7TCFGLE1';
 
-export default function HeroSection() {
+const ROTATING_WORDS = [
+  'Digital Reality.',
+  'Scalable Platforms.',
+  'Mobile Products.',
+  'Cloud Systems.',
+];
+
+const STACK_CHIPS = [
+  { name: 'React', Logo: ReactLogo },
+  { name: 'Python', Logo: PythonLogo },
+  { name: 'Django', Logo: DjangoLogo },
+  { name: 'PostgreSQL', Logo: PostgreSQLLogo },
+];
+
+const HERO_STATS = [
+  { value: 99.9, decimals: 1, suffix: '%', label: 'Uptime Standard', Icon: Code2 },
+  { value: 100, suffix: '%', label: 'IP & Code Ownership', Icon: Shield },
+  { value: 30, suffix: '-Day', label: 'Post-Launch Warranty', Icon: Clock },
+  { value: 24, suffix: '/7', label: 'Monitoring & Support', Icon: Users },
+];
+
+const KPI_BARS = [58, 74, 46, 88, 62, 96, 70];
+
+function RotatingWord() {
+  const [index, setIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    const id = setInterval(() => setIndex((prev) => (prev + 1) % ROTATING_WORDS.length), 2600);
+    return () => clearInterval(id);
+  }, [reduceMotion]);
+
+  if (reduceMotion) {
+    return <span className="text-gradient-brand inline-block">{ROTATING_WORDS[0]}</span>;
+  }
+
   return (
-    <section className="relative pt-28 pb-16 overflow-hidden bg-[#F8FAFC]">
-      
-      {/* Background Soft Blue Ambient Lights */}
-      <div className="absolute top-0 right-0 w-3/5 h-[650px] bg-gradient-to-bl from-[#DBEAFE]/40 via-[#EFF6FF]/60 to-transparent pointer-events-none blur-3xl"></div>
-      <div className="absolute top-1/3 left-1/4 w-[450px] h-[350px] bg-blue-50/50 pointer-events-none blur-3xl"></div>
+    <span className="relative inline-flex h-[1.18em] items-center overflow-hidden align-bottom">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={ROTATING_WORDS[index]}
+          initial={{ y: '110%', opacity: 0, filter: 'blur(6px)' }}
+          animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
+          exit={{ y: '-110%', opacity: 0, filter: 'blur(6px)' }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          className="text-gradient-brand whitespace-nowrap"
+        >
+          {ROTATING_WORDS[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
-      {/* Top Right "IDEAS TO REALITY" Technical Marker */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="hidden lg:flex items-center justify-end gap-3 text-xs font-mono font-semibold tracking-widest text-[#2563EB] uppercase mb-3">
-          <span>IDEAS TO REALITY</span>
-          <div className="w-16 h-[2px] bg-[#2563EB]"></div>
-        </div>
-      </div>
+/** Animated product surface used as the hero's visual anchor. */
+function ProductShowcase() {
+  return (
+    <div className="relative w-full max-w-[560px]">
+      {/* Glow behind the mockup */}
+      <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-tr from-[#DBEAFE] via-white to-[#E0F2FE] blur-2xl" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        
-        {/* Main Grid: Left Headline & Right Visual Composition */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-6 items-center">
-          
-          {/* Left Column: Headlines & Actions */}
-          <div className="lg:col-span-5 text-center lg:text-left space-y-6">
-            
-            {/* Eyebrow Pill/Tag */}
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-block"
-            >
-              <span className="text-xs sm:text-sm font-bold tracking-wider text-[#2563EB] uppercase font-mono">
-                WEB &bull; APP &bull; CLOUD &bull; SOFTWARE SOLUTIONS
-              </span>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-[54px] font-black tracking-tight text-[#0F172A] leading-[1.12]"
-            >
-              We Turn Ideas Into{' '}
-              <span className="text-[#2563EB] block">
-                Digital Reality.
-              </span>
-            </motion.h1>
-
-            {/* Description Paragraph */}
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-xl mx-auto lg:mx-0"
-            >
-              <span className="font-semibold text-[#1E293B]">Core Apex.dev</span> builds modern websites, mobile applications, custom software, e-commerce platforms, backend systems and cloud solutions for businesses.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2"
-            >
-              {/* Start a Project */}
-              <Link
-                to="/contact"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] active:bg-[#1E40AF] text-white text-sm font-semibold shadow-button-glow transition-all duration-200"
-              >
-                <span>Start a Project</span>
-                <ArrowRight size={16} />
-              </Link>
-
-              {/* View Our Work */}
-              <Link
-                to="/projects"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-[#F8FAFC] text-[#1E293B] border border-slate-200 hover:border-slate-300 text-sm font-semibold transition-all duration-200 shadow-sm"
-              >
-                <span>View Our Work</span>
-                <ArrowRight size={15} className="text-[#64748B]" />
-              </Link>
-
-              {/* WhatsApp Us */}
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-emerald-50/50 border border-[#22C55E]/60 text-[#16A34A] text-sm font-semibold transition-all duration-200 shadow-sm"
-              >
-                <WhatsAppIcon size={18} />
-                <span>WhatsApp Us</span>
-              </a>
-            </motion.div>
-
+      <TiltCard intensity={6} className="rounded-[26px]">
+        <div className="overflow-hidden rounded-[26px] border border-[#E2E8F0] bg-white shadow-lift">
+          {/* Browser chrome */}
+          <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#EF4444]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#F59E0B]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#10B981]" />
+            </div>
+            <div className="flex items-center gap-1.5 rounded-md border border-[#E2E8F0] bg-white px-2.5 py-1 text-[10px] font-mono text-[#64748B]">
+              <Shield size={10} className="text-emerald-500" />
+              coreapex.dev
+            </div>
+            <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-600">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              live
+            </div>
           </div>
 
-          {/* Right Column: Realistic Workstation & Floating Badges */}
-          <div className="lg:col-span-7 relative flex items-center justify-center pt-8 pb-4">
-            
-            {/* Composition Container */}
-            <div className="relative w-full max-w-2xl">
-              
-              {/* Floating Card 1: Tech Stack Icons (Top Center) */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="absolute -top-6 left-1/4 sm:left-1/3 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-xl border border-slate-100 flex items-center gap-4 sm:gap-6"
-              >
-                {/* React */}
-                <div className="flex flex-col items-center gap-1">
-                  <ReactLogo size={24} />
-                  <span className="text-[10px] font-semibold text-slate-700">React</span>
+          {/* Abstract hero banner image */}
+          <div className="relative h-40 overflow-hidden sm:h-48">
+            <SmartImage
+              src={IMAGES.heroAbstract}
+              alt="Abstract visualization of Core Apex digital product engineering"
+              priority
+              wrapperClassName="h-full w-full"
+              className="transition-transform duration-[1200ms]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/10 to-transparent" />
+            <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between gap-3">
+              <div>
+                <div className="text-[10px] font-mono uppercase tracking-widest text-[#2563EB]">
+                  Product Delivery
                 </div>
-                {/* Python */}
-                <div className="flex flex-col items-center gap-1">
-                  <PythonLogo size={24} />
-                  <span className="text-[10px] font-semibold text-slate-700">Python</span>
-                </div>
-                {/* Django */}
-                <div className="flex flex-col items-center gap-1">
-                  <DjangoLogo size={24} />
-                  <span className="text-[10px] font-semibold text-slate-700">Django</span>
-                </div>
-                {/* PostgreSQL */}
-                <div className="flex flex-col items-center gap-1">
-                  <PostgreSQLLogo size={24} />
-                  <span className="text-[10px] font-semibold text-slate-700">PostgreSQL</span>
-                </div>
-              </motion.div>
+                <div className="text-sm font-bold text-[#172033]">Sprint 04 · Shipping</div>
+              </div>
+              <span className="rounded-lg border border-[#BFDBFE] bg-white/95 px-2 py-1 text-[10px] font-mono font-semibold text-[#1D4ED8]">
+                +18% velocity
+              </span>
+            </div>
+          </div>
 
-              {/* Floating Card 2: Checklist (Middle Left) */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-                className="absolute top-28 -left-4 sm:-left-8 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-slate-100 space-y-2.5 min-w-[170px]"
-              >
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
-                  <Check size={14} className="text-[#2563EB] stroke-[3]" />
-                  <span>Modern Design</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
-                  <Check size={14} className="text-[#2563EB] stroke-[3]" />
-                  <span>Clean Code</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
-                  <Check size={14} className="text-[#2563EB] stroke-[3]" />
-                  <span>Fast Performance</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
-                  <Check size={14} className="text-[#2563EB] stroke-[3]" />
-                  <span>Ongoing Support</span>
-                </div>
-              </motion.div>
+          {/* Animated KPI panel */}
+          <div className="space-y-4 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#172033]">
+                <Activity size={14} className="text-[#2563EB]" />
+                Performance Telemetry
+              </div>
+              <span className="text-[10px] font-mono text-[#64748B]">last 7 cycles</span>
+            </div>
 
-              {/* Workstation Base: Laptop & Mobile & Desk Setup */}
-              <div className="relative pl-12 pr-6 pt-10 pb-6">
-                
-                {/* Realistic Laptop Mockup */}
-                <div className="relative z-10 w-full max-w-[480px] mx-auto sm:ml-auto sm:mr-16">
-                  
-                  {/* Laptop Screen Bezel */}
-                  <div className="rounded-t-2xl bg-[#0B0F17] p-2.5 shadow-2xl border border-slate-700/80">
-                    
-                    {/* Screen Top Bar */}
-                    <div className="flex items-center justify-between px-2 py-1.5 bg-[#141A26] rounded-t-lg border-b border-slate-800/80">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></div>
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></div>
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#10B981]"></div>
-                      </div>
-                      <div className="flex items-center gap-3 text-[10px] font-mono text-slate-400">
-                        <span className="text-slate-300">📁 project</span>
-                        <span className="text-[#38BDF8]">📄 views.py</span>
-                      </div>
-                      <div className="w-8"></div>
-                    </div>
+            <div className="flex h-24 items-end gap-2 rounded-xl border border-[#F1F5F9] bg-[#F8FAFC] p-3">
+              {KPI_BARS.map((height, idx) => (
+                <motion.span
+                  key={idx}
+                  className="flex-1 rounded-t-md bg-gradient-to-t from-[#2563EB] to-[#60A5FA]"
+                  style={{ height: `${height}%`, transformOrigin: 'bottom' }}
+                  initial={{ scaleY: 0.15, opacity: 0 }}
+                  animate={{ scaleY: 1, opacity: 1 }}
+                  transition={{ delay: 0.5 + idx * 0.08, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                />
+              ))}
+            </div>
 
-                    {/* IDE Content Area */}
-                    <div className="bg-[#0B0F17] p-3 grid grid-cols-12 gap-2 text-[10px] font-mono leading-relaxed h-[210px] overflow-hidden rounded-b-lg select-none">
-                      
-                      {/* Left Sidebar: File Tree */}
-                      <div className="col-span-4 border-r border-slate-800/80 pr-2 text-slate-400 space-y-1">
-                        <div className="text-slate-200 font-semibold flex items-center gap-1">
-                          <span>▼ frontend</span>
-                        </div>
-                        <div className="pl-2 space-y-0.5 text-[9px]">
-                          <div>▼ src</div>
-                          <div className="pl-2 text-slate-500">📄 components</div>
-                          <div className="pl-2 text-slate-500">📄 pages</div>
-                          <div className="pl-2 text-slate-500">📄 services</div>
-                        </div>
-                        <div className="text-slate-200 font-semibold pt-1 flex items-center gap-1">
-                          <span>▼ backend</span>
-                        </div>
-                        <div className="pl-2 space-y-0.5 text-[9px]">
-                          <div className="text-[#38BDF8]">📄 api</div>
-                          <div className="text-slate-500">📄 models</div>
-                          <div className="text-[#60A5FA]">📄 views.py</div>
-                          <div className="text-slate-500">📄 config</div>
-                        </div>
-                      </div>
-
-                      {/* Right Editor: Python Django API Code */}
-                      <div className="col-span-8 pl-1 text-slate-300 space-y-0.5">
-                        <div className="text-slate-500">1  <span className="text-[#F472B6]">from</span> django.shortcuts <span className="text-[#F472B6]">import</span> render</div>
-                        <div className="text-slate-500">2  <span className="text-[#F472B6]">from</span> rest_framework.response <span className="text-[#F472B6]">import</span> Response</div>
-                        <div className="text-slate-500">3  <span className="text-[#F472B6]">from</span> rest_framework.decorators <span className="text-[#F472B6]">import</span> api_view</div>
-                        <div className="text-slate-500">4  <span className="text-[#F472B6]">from</span> .models <span className="text-[#F472B6]">import</span> Project</div>
-                        <div className="text-slate-500">5</div>
-                        <div className="text-slate-500">6  <span className="text-[#60A5FA]">@api_view</span>([<span className="text-[#34D399]">'GET'</span>])</div>
-                        <div className="text-slate-500">7  <span className="text-[#F472B6]">def</span> <span className="text-[#FBBF24]">project_list</span>(request):</div>
-                        <div className="text-slate-500">8      projects = Project.objects.<span className="text-[#60A5FA]">filter</span>(is_published=<span className="text-[#F472B6]">True</span>)</div>
-                        <div className="text-slate-500">9      serializer = ProjectSerializer(projects, many=<span className="text-[#F472B6]">True</span>)</div>
-                        <div className="text-slate-500">10     <span className="text-[#F472B6]">return</span> Response({'{'}</div>
-                        <div className="text-slate-500">11         <span className="text-[#34D399]'">'success'</span>: <span className="text-[#F472B6]">True</span>,</div>
-                        <div className="text-slate-500">12         <span className="text-[#34D399]'">'data'</span>: serializer.data</div>
-                        <div className="text-slate-500">13     {'}'})</div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* Laptop Bottom Aluminum Base & Hinge */}
-                  <div className="relative h-4 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 rounded-b-xl shadow-lg flex items-center justify-center">
-                    <div className="w-16 h-1 bg-slate-800 rounded-full"></div>
-                  </div>
-                  {/* Laptop Shadow on Desk */}
-                  <div className="h-3 w-5/6 mx-auto bg-slate-900/20 blur-md rounded-full"></div>
-
-                </div>
-
-                {/* Smartphone Standing Mockup (Overlapping on right) */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { k: 'Lighthouse', v: '99' },
+                { k: 'Coverage', v: '94%' },
+                { k: 'Build', v: '1.2s' },
+              ].map((item, idx) => (
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  key={item.k}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="absolute bottom-2 -right-2 sm:right-2 z-20 w-[160px] sm:w-[185px] bg-white rounded-[28px] p-2.5 shadow-2xl border-[4px] border-slate-900"
+                  transition={{ delay: 0.9 + idx * 0.1, duration: 0.5 }}
+                  className="rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-center"
                 >
-                  {/* Dynamic Island Notch */}
-                  <div className="w-12 h-2.5 bg-slate-900 rounded-full mx-auto mb-2"></div>
-
-                  {/* Mobile Screen Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                    <div className="flex items-center gap-1">
-                      <ApexLogoMark size={14} />
-                      <span className="text-[9px] font-bold text-slate-900">Core Apex.dev</span>
-                    </div>
-                    <MenuIcon size={12} className="text-slate-600" />
-                  </div>
-
-                  {/* Mobile Screen Body */}
-                  <div className="py-2.5 space-y-2 text-center">
-                    <div className="text-[11px] font-extrabold text-slate-900 leading-tight">
-                      Build Your Next Big Idea
-                    </div>
-                    <div className="text-[8px] text-slate-500 leading-tight">
-                      Modern web, mobile and cloud solutions for your business.
-                    </div>
-                    <div className="pt-0.5">
-                      <div className="inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded-full bg-[#2563EB] text-white text-[8px] font-bold">
-                        <span>Get Started</span>
-                        <ArrowRight size={8} />
-                      </div>
-                    </div>
-
-                    {/* Mobile Analytics Graphic */}
-                    <div className="mt-2 p-1.5 rounded-lg bg-slate-50 border border-slate-100 flex items-end justify-between h-9 px-2">
-                      <div className="w-2 bg-[#93C5FD] rounded-t h-4"></div>
-                      <div className="w-2 bg-[#60A5FA] rounded-t h-6"></div>
-                      <div className="w-2 bg-[#3B82F6] rounded-t h-8"></div>
-                      <div className="w-2 bg-[#2563EB] rounded-t h-5"></div>
-                      <div className="w-2 bg-[#1D4ED8] rounded-t h-7"></div>
-                    </div>
+                  <div className="text-sm font-extrabold text-[#172033]">{item.v}</div>
+                  <div className="text-[9px] font-mono uppercase tracking-wider text-[#64748B]">
+                    {item.k}
                   </div>
                 </motion.div>
-
-                {/* Desk Hardcover Notebook & Pen on bottom left */}
-                <div className="absolute -bottom-4 left-6 hidden sm:flex items-center gap-2 pointer-events-none">
-                  <div className="w-28 h-12 bg-slate-900 rounded-lg shadow-lg border border-slate-800 flex items-center justify-center">
-                    <div className="w-full h-[1px] bg-slate-800"></div>
-                  </div>
-                  <div className="w-16 h-1.5 bg-gradient-to-r from-slate-400 to-slate-600 rounded-full shadow-md"></div>
-                </div>
-
-              </div>
-
+              ))}
             </div>
-
           </div>
-
         </div>
+      </TiltCard>
 
-        {/* Bottom Horizontal 4-Column Stats Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-14 pt-6 border-t border-slate-200/80"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            
-            {/* Stat 1: 99.9% */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE]/60 flex items-center justify-center text-[#2563EB] shrink-0">
-                <Code2 size={22} />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">99.9%</div>
-                <div className="text-xs text-[#64748B] font-medium">Uptime Standard</div>
-              </div>
-            </div>
+      {/* Floating checklist card */}
+      <motion.div
+        initial={{ opacity: 0, x: -28, y: 12 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute -left-3 top-24 z-20 hidden min-w-[168px] rounded-2xl border border-slate-100 bg-white/95 p-4 shadow-xl backdrop-blur-md sm:-left-8 sm:block animate-float-soft"
+      >
+        {['Modern Design', 'Clean Code', 'Fast Performance', 'Ongoing Support'].map((item, idx) => (
+          <motion.div
+            key={item}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.7 + idx * 0.12, duration: 0.45 }}
+            className="flex items-center gap-2 py-1 text-xs font-semibold text-slate-800"
+          >
+            <Check size={14} className="stroke-[3] text-[#2563EB]" />
+            <span>{item}</span>
+          </motion.div>
+        ))}
+      </motion.div>
 
-            {/* Stat 2: 100% */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE]/60 flex items-center justify-center text-[#2563EB] shrink-0">
-                <Shield size={22} />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">100%</div>
-                <div className="text-xs text-[#64748B] font-medium">IP & Code Ownership</div>
-              </div>
-            </div>
-
-            {/* Stat 3: 30-Day */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE]/60 flex items-center justify-center text-[#2563EB] shrink-0">
-                <Clock size={22} />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">30-Day</div>
-                <div className="text-xs text-[#64748B] font-medium">Post-Launch Warranty</div>
-              </div>
-            </div>
-
-            {/* Stat 4: Dedicated Support */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE]/60 flex items-center justify-center text-[#2563EB] shrink-0">
-                <Users size={22} />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Dedicated</div>
-                <div className="text-xs text-[#64748B] font-medium">Support Team</div>
-              </div>
-            </div>
-
+      {/* Floating stack chips card */}
+      <motion.div
+        initial={{ opacity: 0, y: -24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute -top-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-2xl border border-slate-100 bg-white/95 px-4 py-3 shadow-xl backdrop-blur-md sm:gap-6 animate-float-delayed"
+      >
+        {STACK_CHIPS.map(({ name, Logo }) => (
+          <div key={name} className="flex flex-col items-center gap-1">
+            <Logo size={22} />
+            <span className="text-[10px] font-semibold text-slate-700">{name}</span>
           </div>
+        ))}
+      </motion.div>
+
+      {/* Floating deploy card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute -bottom-6 right-0 z-20 hidden items-center gap-3 rounded-2xl border border-slate-100 bg-white/95 px-4 py-3 shadow-xl backdrop-blur-md sm:flex animate-float"
+      >
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#2563EB]">
+          <GitBranch size={16} />
+        </div>
+        <div>
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#172033]">
+            Deployment
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          </div>
+          <div className="text-[10px] font-mono text-[#64748B]">CI/CD · zero downtime</div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+export default function HeroSection() {
+  return (
+    <section className="relative overflow-hidden bg-[#F8FAFC] pb-20 pt-20 sm:pt-24">
+      <AuroraBackground intensity="strong" />
+
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Technical marker */}
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6 hidden items-center justify-end gap-3 text-xs font-mono font-semibold uppercase tracking-widest text-[#2563EB] lg:flex"
+        >
+          <span>IDEAS TO REALITY</span>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: 64 }}
+            transition={{ delay: 0.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="h-[2px] bg-[#2563EB]"
+          />
         </motion.div>
 
-      </div>
+        <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-8">
+          {/* Left: copy + CTAs */}
+          <div className="space-y-7 text-center lg:col-span-5 lg:text-left">
+            <Reveal variant="down" duration={0.5}>
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#BFDBFE] bg-white/80 px-3.5 py-1.5 text-[11px] font-mono font-bold uppercase tracking-[0.14em] text-[#2563EB] backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-70 animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#2563EB]" />
+                </span>
+                Web &bull; App &bull; Cloud &bull; Software
+              </span>
+            </Reveal>
 
+            <Reveal delay={0.08}>
+              <h1 className="text-4xl font-black leading-[1.1] tracking-tight text-[#0F172A] sm:text-5xl lg:text-[54px]">
+                We Turn Ideas Into
+                <span className="mt-1 block">
+                  <RotatingWord />
+                </span>
+              </h1>
+            </Reveal>
+
+            <Reveal delay={0.16}>
+              <p className="mx-auto max-w-xl text-base leading-relaxed text-[#64748B] sm:text-lg lg:mx-0">
+                <span className="font-semibold text-[#1E293B]">Core Apex.dev</span> builds modern websites,
+                mobile applications, custom software, e-commerce platforms, backend systems and cloud
+                solutions for businesses.
+              </p>
+            </Reveal>
+
+            <Stagger className="flex flex-col items-center justify-center gap-3 pt-1 lg:justify-start sm:flex-row" stagger={0.1}>
+              <StaggerItem variant="up" className="w-full sm:w-auto">
+                <Link
+                  to="/contact"
+                  className="card-sheen group/cta relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#2563EB] px-6 py-3.5 text-sm font-semibold text-white shadow-button-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1D4ED8] sm:w-auto"
+                >
+                  <span className="relative z-10">Start a Project</span>
+                  <ArrowRight size={16} className="relative z-10 transition-transform duration-300 group-hover/cta:translate-x-1" />
+                </Link>
+              </StaggerItem>
+
+              <StaggerItem variant="up" className="w-full sm:w-auto">
+                <Link
+                  to="/projects"
+                  className="group/btn inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-[#1E293B] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#BFDBFE] hover:bg-[#F8FAFC] sm:w-auto"
+                >
+                  <span>View Our Work</span>
+                  <ArrowRight size={15} className="text-[#64748B] transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </Link>
+              </StaggerItem>
+
+              <StaggerItem variant="up" className="w-full sm:w-auto">
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#22C55E]/60 bg-white px-5 py-3.5 text-sm font-semibold text-[#16A34A] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-50/60 sm:w-auto"
+                >
+                  <WhatsAppIcon size={18} />
+                  <span>WhatsApp Us</span>
+                </a>
+              </StaggerItem>
+            </Stagger>
+
+            <Reveal delay={0.2} variant="fade">
+              <div className="flex flex-col items-center gap-4 pt-2 sm:flex-row sm:items-center lg:justify-start">
+                <div className="flex -space-x-2.5">
+                  {['RM', 'AC', 'SM', 'KP'].map((initials, idx) => (
+                    <motion.span
+                      key={initials}
+                      initial={{ opacity: 0, scale: 0.6 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.4 + idx * 0.09, duration: 0.4 }}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#2563EB] to-[#38BDF8] text-[10px] font-bold text-white shadow-sm"
+                    >
+                      {initials}
+                    </motion.span>
+                  ))}
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-1">
+                    {[0, 1, 2, 3, 4].map((star) => (
+                      <Star key={star} size={12} className="fill-amber-400 text-amber-400" />
+                    ))}
+                    <span className="ml-1 text-xs font-bold text-[#172033]">5.0</span>
+                  </div>
+                  <div className="text-xs text-[#64748B]">Rated by founders across 4 countries</div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Right: animated product showcase */}
+          <div className="flex items-center justify-center pt-10 lg:col-span-7 lg:pt-0">
+            <ProductShowcase />
+          </div>
+        </div>
+
+        {/* Stats strip */}
+        <Stagger
+          className="mt-20 grid grid-cols-2 gap-5 border-t border-slate-200/80 pt-8 md:grid-cols-4 sm:gap-8"
+          stagger={0.1}
+        >
+          {HERO_STATS.map(({ value, decimals = 0, suffix, label, Icon }) => (
+            <StaggerItem key={label} variant="up">
+              <div className="group flex items-center gap-3.5">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#BFDBFE]/60 bg-[#EFF6FF] text-[#2563EB] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:bg-white group-hover:shadow-button-glow">
+                  <Icon size={22} />
+                </div>
+                <div>
+                  <div className="text-xl font-extrabold tracking-tight text-[#0F172A] sm:text-2xl">
+                    <AnimatedCounter value={value} decimals={decimals} suffix={suffix} />
+                  </div>
+                  <div className="text-xs font-medium text-[#64748B]">{label}</div>
+                </div>
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+
+        {/* Stack marquee */}
+        <Reveal variant="fade" className="mt-14 border-t border-slate-200/70 pt-6">
+          <div className="flex flex-col items-center gap-4 lg:flex-row lg:gap-8">
+            <div className="flex shrink-0 items-center gap-2 text-[11px] font-mono font-semibold uppercase tracking-widest text-[#64748B]">
+              <Sparkles size={13} className="text-[#2563EB]" />
+              Trusted production stack
+            </div>
+            <Marquee speed={34} className="flex-1">
+              {[
+                'React 19',
+                'Django REST',
+                'PostgreSQL 18',
+                'FastAPI',
+                'AWS',
+                'Docker',
+                'React Native',
+                'Tailwind CSS',
+                'Redis',
+                'CI/CD Pipelines',
+              ].map((tech) => (
+                <span
+                  key={tech}
+                  className="mx-4 whitespace-nowrap text-sm font-semibold text-[#94A3B8] transition-colors hover:text-[#2563EB]"
+                >
+                  {tech}
+                </span>
+              ))}
+            </Marquee>
+          </div>
+        </Reveal>
+
+        {/* Scroll cue */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.6 }}
+          className="mt-12 hidden justify-center lg:flex"
+        >
+          <div className="flex flex-col items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-[#94A3B8]">
+            <Mouse size={16} />
+            <span className="relative flex h-6 w-[1px] bg-slate-300">
+              <span className="absolute left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-[#2563EB] animate-scroll-dot" />
+            </span>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }

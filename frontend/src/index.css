@@ -13,10 +13,15 @@
   --border-default: #E2E8F0;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   background-color: #F8FAFC;
   color: #1E293B;
-  font-family: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', 'Inter Variable', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
 }
 
@@ -43,19 +48,71 @@ body {
     linear-gradient(to bottom, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
 }
 
+.bg-grid-fine {
+  background-size: 18px 18px;
+  background-image:
+    linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+}
+
 /* Clean White Card Utility */
 .light-card {
+  position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 1rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .light-card:hover {
   border-color: #BFDBFE;
   box-shadow: 0 12px 30px -4px rgba(37, 99, 235, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
   transform: translateY(-3px);
+}
+
+/* Interactive card with animated gradient border glow */
+.card-interactive {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.55), rgba(56, 189, 248, 0.35), transparent 65%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.card-interactive:hover::after {
+  opacity: 1;
+}
+
+/* Spotlight sheen that sweeps across a card on hover */
+.card-sheen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 55%;
+  left: -70%;
+  background: linear-gradient(100deg, transparent 10%, rgba(255, 255, 255, 0.75) 50%, transparent 90%);
+  transform: skewX(-14deg);
+  transition: left 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.card-sheen:hover::before {
+  left: 118%;
 }
 
 /* White Navbar */
@@ -66,9 +123,72 @@ body {
   border-bottom: 1px solid #E2E8F0;
 }
 
-/* Subtle Gradient for Hero Text Highlight */
+/* Gradient text */
 .text-gradient-brand {
-  color: #2563EB;
+  background: linear-gradient(96deg, #2563EB 0%, #1D4ED8 42%, #38BDF8 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 8s ease infinite;
+}
+
+/* Glass panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+/* Animated underline for nav / inline links */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #2563EB, #38BDF8);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Shimmering loading skeleton */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #EFF2F7;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* Dotted connector used between process milestones */
+.dotted-rail {
+  background-image: linear-gradient(to bottom, rgba(37, 99, 235, 0.35) 45%, transparent 0);
+  background-position: right;
+  background-size: 1px 12px;
+  background-repeat: repeat-y;
+}
+
+/* Mask fades for marquees */
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
 }
 
 /* Form input standard */
@@ -86,4 +206,19 @@ body {
   outline: none;
   border-color: #2563EB;
   box-shadow: 0 0 0 3px #DBEAFE;
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
