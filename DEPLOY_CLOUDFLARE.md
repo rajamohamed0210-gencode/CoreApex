@@ -31,13 +31,36 @@ $ npx wrangler deploy --dry-run
 The very first check (commit `9e1c620`) passed because it came from the Worker
 creation step, not from a repository build; every push afterwards failed.
 
+A configuration alone is not enough, though. Assets have to be *built* first, so
+with an empty **Build command** in the dashboard the deploy fails a step later:
+
+```console
+$ npx wrangler versions upload --dry-run
+✘ [ERROR] The directory specified by the "assets.directory" field in your
+  configuration file does not exist: …/frontend/dist
+```
+
 ## The fix
 
 | File | Purpose |
 | --- | --- |
-| `wrangler.jsonc` (repo root) | Declares Worker `coreapex` and uploads the built site from `./frontend/dist` as static assets, with SPA fallback. |
-| `frontend/wrangler.jsonc` | The same Worker expressed relative to `frontend/` (`./dist`), so the build works whether Cloudflare's *Root directory* is the repository root or `frontend/`. Wrangler resolves `directory` against the config file it loads, so both point at the same `dist/`. Keep the two files in sync. |
+| `wrangler.jsonc` (repo root) | Declares Worker `coreapex`, uploads the built site from `./frontend/dist` as static assets with SPA fallback, and carries a `build` block so `npx wrangler deploy` builds the frontend itself. |
+| `frontend/wrangler.jsonc` | The same Worker expressed relative to `frontend/` (`./dist`, `cwd: "."`), so the build works whether Cloudflare's *Root directory* is the repository root or `frontend/`. Wrangler resolves `directory` and `build.cwd` against the config file it loads, so both point at the same `dist/`. Keep the two files in sync. |
 | `package.json` + `package-lock.json` (repo root) | Give the build a root-level `npm run build` that installs and builds the frontend (`npm --prefix frontend ci && npm --prefix frontend run build`), and pin `wrangler` so Workers Builds uses that version. |
+
+The `build` block is what makes the deploy robust:
+
+```jsonc
+"build": { "command": "npm ci --no-audit --no-fund && npm run build", "cwd": "frontend" }
+```
+
+> `command` … will be run as part of `wrangler dev` and `npx wrangler deploy`
+> — [Wrangler custom builds](https://developers.cloudflare.com/workers/wrangler/custom-builds/)
+
+So a bare `npx wrangler deploy` — the default deploy command — installs the
+frontend dependencies, runs the Vite build, and only then uploads the assets.
+The dashboard build command becomes optional; if it is also set, the frontend is
+simply built twice (a few seconds).
 
 Routes are served with `not_found_handling: "single-page-application"`, so deep
 links such as `/projects/erp-software` survive a refresh.
@@ -53,9 +76,23 @@ links such as `/projects/erp-software` survive a refresh.
 | Deploy command | `npx wrangler deploy` (the default) |
 | Build variables | `VITE_API_URL` — see below |
 
-The build command is optional: because `wrangler.jsonc` declares the assets
-directory, `npx wrangler deploy` alone uploads whatever is in `frontend/dist`,
-so the build command must be the step that produces it.
+The build command is optional: `wrangler.jsonc` builds the frontend itself
+through its `build` block before uploading `frontend/dist`, so `npx wrangler
+deploy` alone is enough. Setting it as well just builds the frontend twice.
+
+### Preview builds (non-production branches)
+
+Commits on branches other than the production branch run the trigger's **Preview
+command**, which defaults to `npx wrangler preview` — the Worker Previews beta,
+which takes a Worker **script** entry point. This Worker is assets-only, so if a
+preview build still fails, set the Preview command (Settings → Build) to:
+
+```
+npx wrangler versions upload
+```
+
+That command was verified against this configuration, including the custom build
+and static-asset upload.
 
 ### Pointing the site at the API
 

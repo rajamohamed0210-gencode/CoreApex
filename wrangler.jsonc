@@ -1,15 +1,17 @@
 // Cloudflare Workers configuration for the `coreapex` Worker.
 //
-// The Worker serves the built React site as static assets, so a Workers Build
-// only has to (1) build the Vite frontend and (2) run `npx wrangler deploy`.
+// The Worker serves the built React site as static assets. The `build` block
+// below makes a bare `npx wrangler deploy` (Workers Builds' default deploy
+// command) self-sufficient: it installs frontend dependencies, runs the Vite
+// build, and only then uploads ./frontend/dist. Without it, a build whose
+// "Build command" is left empty has nothing to upload and fails with
+//   "The directory specified by the assets.directory field ... does not exist"
+// or, with no Wrangler config at all:
+//   "ERROR: Missing entry-point to Worker script or to assets directory".
+// See DEPLOY_CLOUDFLARE.md.
 //
-// Why this file exists: without a committed Wrangler configuration, the deploy
-// step of a Workers Build fails with
-//   "✘ [ERROR] Missing entry-point to Worker script or to assets directory"
-// because `wrangler deploy` has nothing to upload. See DEPLOY_CLOUDFLARE.md.
-//
-// Asset paths are resolved relative to THIS file, so the configuration works
-// both when the build runs from the repository root and when it runs from
+// Asset paths resolve relative to THIS file, so the configuration works both
+// when the build runs from the repository root and when it runs from
 // `frontend/` (Wrangler searches parent directories for the config).
 {
   "name": "coreapex",
@@ -20,5 +22,9 @@
     // Client-side routing: every unknown path serves index.html so deep links
     // such as /projects/erp-software work on refresh.
     "not_found_handling": "single-page-application"
+  },
+  "build": {
+    "command": "npm ci --no-audit --no-fund && npm run build",
+    "cwd": "frontend"
   }
 }
