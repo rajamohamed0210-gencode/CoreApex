@@ -1,0 +1,43 @@
+from django.urls import path
+
+from .views import (
+    AdminAuthLoginView,
+    AdminAuthLogoutView,
+    AdminAuthRefreshView,
+    AdminContactDetailView,
+    AdminContactListCreateView,
+    AdminDashboardView,
+    AdminHealthView,
+    AdminMeView,
+    AdminProjectDetailView,
+    AdminProjectListCreateView,
+    AdminServiceDetailView,
+    AdminServiceListCreateView,
+    AdminSettingsView,
+    AdminTeamDetailView,
+    AdminTeamListCreateView,
+    AdminTestimonialDetailView,
+    AdminTestimonialListCreateView,
+    AdminUserListView,
+)
+
+urlpatterns = [
+    path('auth/login/', AdminAuthLoginView.as_view(), name='admin_auth_login'),
+    path('auth/refresh/', AdminAuthRefreshView.as_view(), name='admin_auth_refresh'),
+    path('auth/logout/', AdminAuthLogoutView.as_view(), name='admin_auth_logout'),
+    path('auth/me/', AdminMeView.as_view(), name='admin_auth_me'),
+    path('dashboard/', AdminDashboardView.as_view(), name='admin_dashboard'),
+    path('health/', AdminHealthView.as_view(), name='admin_health'),
+    path('team/', AdminTeamListCreateView.as_view(), name='admin_team_list'),
+    path('team/<int:pk>/', AdminTeamDetailView.as_view(), name='admin_team_detail'),
+    path('services/', AdminServiceListCreateView.as_view(), name='admin_services_list'),
+    path('services/<int:pk>/', AdminServiceDetailView.as_view(), name='admin_services_detail'),
+    path('projects/', AdminProjectListCreateView.as_view(), name='admin_projects_list'),
+    path('projects/<int:pk>/', AdminProjectDetailView.as_view(), name='admin_projects_detail'),
+    path('contacts/', AdminContactListCreateView.as_view(), name='admin_contacts_list'),
+    path('contacts/<int:pk>/', AdminContactDetailView.as_view(), name='admin_contacts_detail'),
+    path('testimonials/', AdminTestimonialListCreateView.as_view(), name='admin_testimonials_list'),
+    path('testimonials/<int:pk>/', AdminTestimonialDetailView.as_view(), name='admin_testimonials_detail'),
+    path('users/', AdminUserListView.as_view(), name='admin_users_list'),
+    path('settings/', AdminSettingsView.as_view(), name='admin_settings'),
+]
